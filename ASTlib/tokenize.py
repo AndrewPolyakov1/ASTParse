@@ -9,7 +9,7 @@ class ListVisitor(ast.NodeVisitor):
         self.ind = indent
 
     def visit_FunctionDef(self, node):
-        print(f"{'':>{self.cur}}Function {node.name} {node.lineno}->{node.end_lineno}")
+        print(f"[{__name__}] {'':>{self.cur}}Function {node.name} {node.lineno}->{node.end_lineno}")
 
         self.functions.append({
             'name': node.name,
@@ -22,7 +22,7 @@ class ListVisitor(ast.NodeVisitor):
         self.cur -= self.ind
 
     def visit_ClassDef(self, node):
-        print(f"{'':>{self.cur}}Class {node.name} {node.lineno}->{node.end_lineno}")
+        print(f"[{__name__}] {'':>{self.cur}}Class {node.name} {node.lineno}->{node.end_lineno}")
 
         self.classes.append({
             'name': node.name,
