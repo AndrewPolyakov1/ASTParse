@@ -1,0 +1,16 @@
+Define class Person
+   Initialize name and age
+   Define method introduce
+       Print greeting message
+
+Define function ask_for_name_and_age
+   Ask user for name
+   Ask user for age
+   Return name and age
+
+Define function main
+   Get name and age from user
+   Create Person with name and age
+   Call introduce method on Person
+
+Call main function

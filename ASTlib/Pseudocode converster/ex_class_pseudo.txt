@@ -1,0 +1,20 @@
+DEFINE CLASS Person:
+   DEFINE METHOD __init__(self, name, age):
+       self.name = name
+       self.age = age
+
+   DEFINE METHOD introduce(self):
+       print(f"My name is {self.name} and I am {self.age} years old.")
+
+DEFINE METHOD ask_for_name_and_age():
+   name = input("Enter your name: ")
+   age = input("Enter your age: ")
+   return name, age
+
+DEFINE METHOD main():
+   name, age = ask_for_name_and_age()
+   person = Person(name, age)
+   person.introduce()
+
+if __name__ == "__main__":
+   main()
