@@ -1,4 +1,5 @@
 import ast
+import re
 
 
 class ListVisitor(ast.NodeVisitor):
@@ -9,20 +10,22 @@ class ListVisitor(ast.NodeVisitor):
         self.ind = indent
 
     def visit_FunctionDef(self, node):
-        print(f"[{__name__}] {'':>{self.cur}}Function {node.name} {node.lineno}->{node.end_lineno}")
+        print(
+            f"[{__name__}] {'':>{self.cur}}Function {node.name} {node.lineno}->{node.end_lineno}")
 
         self.functions.append({
             'name': node.name,
             'start': node.lineno,
             'end': node.end_lineno
         })
-
+        
         self.cur += self.ind
         self.generic_visit(node)
         self.cur -= self.ind
 
     def visit_ClassDef(self, node):
-        print(f"[{__name__}] {'':>{self.cur}}Class {node.name} {node.lineno}->{node.end_lineno}")
+        print(
+            f"[{__name__}] {'':>{self.cur}}Class {node.name} {node.lineno}->{node.end_lineno}")
 
         self.classes.append({
             'name': node.name,
@@ -69,6 +72,21 @@ class ListVisitor(ast.NodeVisitor):
         return self.classes, self.functions
 
 
+def fix_indent(lines):
+    if len(lines) == 0:
+        return lines
+    
+    m = re.match(r'\s+', lines[0])
+
+    if m is None:
+        return lines
+    
+    _, end = m.span()
+
+    return list(map(lambda x: x[end : ], lines))
+    
+
+
 def tokenize(fn: str):
     """
     Tokenizes functions and classes in the module.
@@ -109,7 +127,7 @@ def tokenize(fn: str):
         tokens.append({
             "type": "function",
             "name": _func['name'],
-            "code": "".join(lines[start - 1: end])
+            "code": "".join(fix_indent(lines[start - 1: end]))
         })
 
     for _cls in classes:
@@ -118,7 +136,7 @@ def tokenize(fn: str):
         tokens.append({
             "type": "class",
             "name": _cls['name'],
-            "code": "".join(lines[start - 1: end])
+            "code": "".join(fix_indent(lines[start - 1: end]))
         })
 
     return tokens
@@ -130,10 +148,12 @@ if __name__ == '__main__':
     import parse
     import json
 
-    file_test = '/../examples/ex1.py'
+    file_test = '/../examples/ex2.py'
 
     path = os.path.dirname(os.path.abspath(__file__))
     path += file_test
     jt = astlib.getAST(path)
     s = tokenize(path)
     print(json.dumps(s, indent=4))
+    # for i in s:
+    #     print(i["code"])
