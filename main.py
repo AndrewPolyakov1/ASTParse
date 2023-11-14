@@ -25,6 +25,7 @@ if __name__ == '__main__':
             calls=False,
             includeDefs=False
         )
-        img = Image.open(io.BytesIO(pic_bytes))
-        img.show()
-
+        print(f'[{__name__}] Token {i} -----------')
+        print(ASTlib.translate(token['code']))
+        ASTlib.create_image(f'.tmp/im{i}', token['code'])
+        
