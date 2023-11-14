@@ -51,5 +51,5 @@ pip install -r reqirements.txt
 
 `create_image_from_config(config: str, name : str)` 
 
-`wrapper_image(code: str) -> path` -> генерит картинку из кода
+`wrapper_image(code: str, name: str) -> path` -> генерит картинку из кода
 

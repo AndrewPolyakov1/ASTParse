@@ -7,3 +7,5 @@ from .astlib import _readFile, getAST
 from .tokenize import tokenize
 from .interface import translate, build_cfg_config, build_cfg_config_file, create_image_from_file, create_image_from_config, wrapper_image
 from .pseudo import parse, unparse
+import ASTlib.parse as parse
+from .py2cfg_ext import CFGBuilder

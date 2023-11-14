@@ -12,13 +12,11 @@ class ListVisitor(ast.NodeVisitor):
     def visit_FunctionDef(self, node):
         print(
             f"[{__name__}] {'':>{self.cur}}Function {node.name} {node.lineno}->{node.end_lineno}")
-
         self.functions.append({
             'name': node.name,
             'start': node.lineno,
             'end': node.end_lineno
         })
-        
         self.cur += self.ind
         self.generic_visit(node)
         self.cur -= self.ind
@@ -26,13 +24,11 @@ class ListVisitor(ast.NodeVisitor):
     def visit_ClassDef(self, node):
         print(
             f"[{__name__}] {'':>{self.cur}}Class {node.name} {node.lineno}->{node.end_lineno}")
-
         self.classes.append({
             'name': node.name,
             'start': node.lineno,
             'end': node.end_lineno
         })
-
         self.cur += self.ind
         self.generic_visit(node)
         self.cur -= self.ind
@@ -51,7 +47,8 @@ class ListVisitor(ast.NodeVisitor):
         Returns
         -------
         tuple[List, List]
-            Tuple of two lists: classes and functions, containing the list of dicts of the following format:
+            Tuple of two lists: classes and functions, containing 
+            the list of dicts of the following format:
 
             {
                 'name': str,
@@ -75,16 +72,11 @@ class ListVisitor(ast.NodeVisitor):
 def fix_indent(lines):
     if len(lines) == 0:
         return lines
-    
     m = re.match(r'\s+', lines[0])
-
     if m is None:
         return lines
-    
     _, end = m.span()
-
-    return list(map(lambda x: x[end : ], lines))
-    
+    return list(map(lambda x: x[end:], lines))
 
 
 def tokenize(fn: str):
@@ -115,10 +107,9 @@ def tokenize(fn: str):
         print(e)
     except OSError as e:
         print(e)
-
     v = ListVisitor()
-    classes, functions = v.visit_nodes(fn)
 
+    classes, functions = v.visit_nodes(fn)
     tokens = []
 
     for _func in functions:
@@ -145,7 +136,6 @@ def tokenize(fn: str):
 if __name__ == '__main__':
     import os
     import astlib
-    import parse
     import json
 
     file_test = '/../examples/ex2.py'

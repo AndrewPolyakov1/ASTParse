@@ -24,3 +24,12 @@ if __name__ == '__main__':
         #     cleanup=False,
         #     show=False
         # )
+        cfg = ASTlib.CFGBuilder().build_from_src(f"{token['type'].upper()} {token['name']}", token['code'])
+        cfg.build_visual(
+            f'exampleCFG_{i}', 
+            'png', 
+            build_keys=False,
+            show=False,
+            calls=False,
+            includeDefs=False
+        )
