@@ -36,3 +36,20 @@ pip install -r reqirements.txt
   <input type="checkbox" name="vehicle3" value="2" checked>
   <label for="vehicle3"> Парс в Json</label><br><br>
 </form>
+
+# Интерфейс
+
+`translate(code: str) -> str (code)`
+
+`tokenize(fn: str) -> List[dict]`
+
+`build_cfg_config(code: str) -> str` -> генерит конфиг
+
+`build_cfg_config_file(code: str, name : str) -> None`
+
+`create_image_from_file(path: str, name : str)` 
+
+`create_image_from_config(config: str, name : str)` 
+
+`wrapper_image(code: str) -> path` -> генерит картинку из кода
+
