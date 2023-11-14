@@ -1016,23 +1016,27 @@ class _Unparser(NodeVisitor):
         self.traverse(node.target)
 
         if isinstance(node.iter, ast.Call):
-            if (node.iter.func.id == 'range'):
-                nargs = len(node.iter.args)
-                if nargs == 1:
-                    self.write(" FROM 0 TO ")
-                    super().visit(node.iter.args[0])
-                elif nargs == 2:
-                    self.write(" FROM ")
-                    super().visit(node.iter.args[0])
-                    self.write(" TO ")
-                    super().visit(node.iter.args[1])
-                elif nargs == 3:
-                    self.write(" FROM ")
-                    super().visit(node.iter.args[0])
-                    self.write(" TO ")
-                    super().visit(node.iter.args[1])
-                    self.write(" WITH STEP ")
-                    super().visit(node.iter.args[2])
+            if isinstance(node.iter.func, ast.Name):
+                if (node.iter.func.id == 'range'):
+                    nargs = len(node.iter.args)
+                    if nargs == 1:
+                        self.write(" FROM 0 TO ")
+                        super().visit(node.iter.args[0])
+                    elif nargs == 2:
+                        self.write(" FROM ")
+                        super().visit(node.iter.args[0])
+                        self.write(" TO ")
+                        super().visit(node.iter.args[1])
+                    elif nargs == 3:
+                        self.write(" FROM ")
+                        super().visit(node.iter.args[0])
+                        self.write(" TO ")
+                        super().visit(node.iter.args[1])
+                        self.write(" WITH STEP ")
+                        super().visit(node.iter.args[2])
+        else:
+            self.write(" IN ")
+            self.traverse_for(node.iter)
 
         with self.block(extra=self.get_type_comment(node)):
             self.traverse(node.body)
