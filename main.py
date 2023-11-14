@@ -3,7 +3,6 @@ import ASTlib.parse as parser
 import os
 import json
 import ast
-from py2cfg import CFGBuilder
 
 file_test = '/examples/ex2.py'
 
@@ -16,20 +15,5 @@ if __name__ == '__main__':
     for i, token in enumerate(s):
         print(f'[{__name__}] Token {i} -----------')
         print(ASTlib.translate(token['code']))
-        # cfg = CFGBuilder().build_from_src(f".tmp/{token['type'].upper()} {token['name']}", token['code'])
-        # cfg.build_visual(
-        #     f'.tmp/exampleCFG_{i}', 
-        #     'png', 
-        #     build_keys=False,
-        #     cleanup=False,
-        #     show=False
-        # )
-        cfg = ASTlib.CFGBuilder().build_from_src(f"{token['type'].upper()} {token['name']}", token['code'])
-        cfg.build_visual(
-            f'exampleCFG_{i}', 
-            'png', 
-            build_keys=False,
-            show=False,
-            calls=False,
-            includeDefs=False
-        )
+        ASTlib.create_image(f'.tmp/im{i}', token['code'])
+        

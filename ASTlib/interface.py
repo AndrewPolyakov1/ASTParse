@@ -1,5 +1,6 @@
 import graphviz as gv
 from .pseudo import parse, unparse
+from .py2cfg_ext import CFGBuilder
 
 
 def build_cfg_config(code: str):
@@ -25,8 +26,21 @@ def wrapper_image(code: str, name: str):
     config = build_cfg_config(code)
     return create_image_from_config(config, name)
 
+
+def create_image(name: str, code: str):
+    cfg = CFGBuilder().build_from_src(name, code)
+    cfg.build_visual(
+        name,
+        'png',
+        build_keys=False,
+        show=False,
+        calls=False,
+        includeDefs=False
+    )
+
+
 def translate(code: str) -> str:
-    tree = parse(code)    
+    tree = parse(code)
     unparsed_code = unparse(tree)
     return unparsed_code
 
@@ -47,5 +61,4 @@ if __name__ == "__main__":
 }
     '''
     with open('pseudo/ex_class.py') as f:
-        l = translate(f.read())
-        print(l)
+        create_image('tmp/im', f.read())
