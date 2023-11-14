@@ -1,12 +1,12 @@
 from PIL import Image, ImageTk
 import shutil
-from tkinter import Tk, Button, Label, Listbox, Frame, Text, PhotoImage, filedialog, Toplevel
+from tkinter import Tk, Button, Label, Listbox, Frame, Text, PhotoImage, filedialog
 
 class TokenPreviewer:
     def __init__(self, root):
         self.root = root
         self.root.title("Token Previewer")
-        self.root.geometry('1200x800') 
+        self.root.geometry('1350x800') 
         self.selected_token = None
         self.text_content = None
 
@@ -31,21 +31,21 @@ class TokenPreviewer:
         self.token_listbox.bind("<<ListboxSelect>>", self.show_preview)
 
         # Создаем фрейм для предпросмотра txt
-        self.preview_frame_txt = Frame(root)
-        self.preview_frame_txt.place(x=200, y=50)
+        self.preview_frame_txt = Frame(root, bd=2, relief="solid")
+        self.preview_frame_txt.place(x=245, y=50)
 
         # Создаем метку для отображения текста
-        self.text_preview = Text(self.preview_frame_txt, height=10, width=40, state="disabled")
+        self.text_preview = Text(self.preview_frame_txt, height=49, width=65, state="disabled")
         self.text_preview.pack()
         self.text_label = Label(self.preview_frame_txt, text="Text Preview:")
         self.text_label.pack()
 
         # Создаем фрейм для предпросмотра im
-        self.preview_frame_im = Frame(root)
-        self.preview_frame_im.place(x=700, y=50)
+        self.preview_frame_im = Frame(root, bd=2, relief="solid")
+        self.preview_frame_im.place(x=800, y=50)
 
         # Создаем метку для отображения изображения
-        self.image_preview = Label(self.preview_frame_im, height=400, width=400)
+        self.image_preview = Label(self.preview_frame_im, height=40, width=50)
         self.image_preview.pack()
         self.image_label = Label(self.preview_frame_im, text="Image Preview:")
         self.image_label.pack()
