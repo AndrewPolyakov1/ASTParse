@@ -844,25 +844,6 @@ class _Unparser(NodeVisitor):
         self.set_precedence(_Precedence.YIELD, node.value)
         self.traverse(node.value)
 
-    def visit_NamedExpr(self, node):
-        with self.require_parens(_Precedence.TUPLE, node):
-            self.set_precedence(_Precedence.ATOM, node.target, node.value)
-            self.traverse(node.target)
-            self.write(" := ")
-            self.traverse(node.value)
-
-    def visit_Import(self, node):
-        self.fill("import ")
-        self.interleave(lambda: self.write(", "), self.traverse, node.names)
-
-    def visit_ImportFrom(self, node):
-        self.fill("from ")
-        self.write("." * (node.level or 0))
-        if node.module:
-            self.write(node.module)
-        self.write(" import ")
-        self.interleave(lambda: self.write(", "), self.traverse, node.names)
-
     def visit_Assign(self, node):
         self.fill()
         for target in node.targets:
@@ -904,31 +885,15 @@ class _Unparser(NodeVisitor):
         self.fill("CONTINUE")
 
     def visit_Delete(self, node):
-        self.fill("del ")
+        self.fill("Delete ")
         self.interleave(lambda: self.write(", "), self.traverse, node.targets)
 
     def visit_Assert(self, node):
-        self.fill("ASSERT ")
+        self.fill("if not ")
         self.traverse(node.test)
         if node.msg:
-            self.write(", ")
+            self.write(", call error: ")
             self.traverse(node.msg)
-
-    def visit_Global(self, node):
-        self.fill("GLOBAL ")
-        self.interleave(lambda: self.write(", "), self.write, node.names)
-
-    def visit_Nonlocal(self, node):
-        self.fill("NONLOCAL ")
-        self.interleave(lambda: self.write(", "), self.write, node.names)
-
-    def visit_Await(self, node):
-        with self.require_parens(_Precedence.AWAIT, node):
-            self.write("AWAIT")
-            if node.value:
-                self.write(" ")
-                self.set_precedence(_Precedence.ATOM, node.value)
-                self.traverse(node.value)
 
     def visit_Yield(self, node):
         with self.require_parens(_Precedence.YIELD, node):
@@ -947,7 +912,7 @@ class _Unparser(NodeVisitor):
             self.traverse(node.value)
 
     def visit_Raise(self, node):
-        self.fill("raise")
+        self.fill("CALL Exception")
         if not node.exc:
             if node.cause:
                 raise ValueError(f"Node can't use cause without an exception.")
@@ -965,7 +930,7 @@ class _Unparser(NodeVisitor):
         for ex in node.handlers:
             self.traverse(ex)
         if node.orelse:
-            self.fill("ELSE")
+            self.fill("If no exceptions do ")
             with self.block():
                 self.traverse(node.orelse)
         if node.finalbody:
@@ -1011,18 +976,19 @@ class _Unparser(NodeVisitor):
     def visit_FunctionDef(self, node):
         self._function_helper(node, "def")
 
-    def visit_AsyncFunctionDef(self, node):
-        self._function_helper(node, "async def")
-
     def _function_helper(self, node, fill_suffix):
         self.maybe_newline()
         for deco in node.decorator_list:
-            self.fill("@")
+            self.fill("@Func as arg for func: ")
             self.traverse(deco)
-        def_str = "Initialize" + " " + node.name
-        self.fill(def_str)
-        with self.delimit("(", ")"):
-            self.traverse(node.args)
+        if node.name == "__init__":
+            def_str = "Class attributes"
+            self.fill(def_str)
+        else:
+            def_str = "Func" + " " + node.name
+            self.fill(def_str)
+            with self.delimit("(", ")"):
+                self.traverse(node.args)
         if node.returns:
             self.write(" -> ")
             self.traverse(node.returns)
@@ -1030,16 +996,29 @@ class _Unparser(NodeVisitor):
             self._write_docstring_and_traverse_body(node)
 
     def visit_For(self, node):
-        self._for_helper("for ", node)
+        self._for_helper("FOR ", node)
 
     def visit_AsyncFor(self, node):
         self._for_helper("async for ", node)
+
+### Не знаю, как убрать range и заменить просто на [a..b]
+    def traverse_for(self, node):
+        if isinstance(node, list):
+            for item in node:
+                if node.args:
+                    self.traverse_for(item)
+        else:
+            super().visit(node)
 
     def _for_helper(self, fill, node):
         self.fill(fill)
         self.traverse(node.target)
         self.write(" in ")
-        self.traverse(node.iter)
+        # self.traverse(node.iter.args[0])
+        # self.write('..')
+        # self.traverse(node.iter.args[1])
+        # self.write(']')
+        self.traverse_for(node.iter)
         with self.block(extra=self.get_type_comment(node)):
             self.traverse(node.body)
         if node.orelse:
@@ -1074,18 +1053,6 @@ class _Unparser(NodeVisitor):
             self.fill("ELSE")
             with self.block():
                 self.traverse(node.orelse)
-
-    def visit_With(self, node):
-        self.fill("with ")
-        self.interleave(lambda: self.write(", "), self.traverse, node.items)
-        with self.block(extra=self.get_type_comment(node)):
-            self.traverse(node.body)
-
-    def visit_AsyncWith(self, node):
-        self.fill("async with ")
-        self.interleave(lambda: self.write(", "), self.traverse, node.items)
-        with self.block(extra=self.get_type_comment(node)):
-            self.traverse(node.body)
 
     def _str_literal_helper(
         self, string, *, quote_types=_ALL_QUOTES, escape_special_whitespace=False
@@ -1200,7 +1167,12 @@ class _Unparser(NodeVisitor):
         write("}")
 
     def visit_Name(self, node):
-        self.write(node.id)
+        if node.id == "print":
+            self.write("OUTPUT")
+        elif node.id == "range":
+            self.write("")
+        else:
+            self.write(node.id)
 
     def _write_docstring(self, node):
         self.fill()

@@ -50,7 +50,7 @@ class Person:
        self.age = age
 
    def introduce(self):
-       print("My name is {self.name} and I am {self.age} years old.")
+       print(f"My name is {self.name} and I am {self.age} years old.")
 
 def ask_for_name_and_age():
    name = input("Enter your name: ")
@@ -62,12 +62,24 @@ def main():
    person = Person(name, age)
    person.introduce()
 
-def summ(a, b):
-    if a >= b:
-        return a + b
+def my_decorator(func):
+    for i in range (1, 10):
+        print (i)
+    if x > 0:
+        a = i
+    else:
+        a = i + 1
+    return wrapper
+
+def say_hello():
+    print("Hello!")
+
+say_hello()
+
 
 if __name__ == "__main__":
-   main()"""
+   main()
+"""
 
 tree = my_ast.parse(code)
 
