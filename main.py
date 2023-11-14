@@ -3,9 +3,10 @@ import ASTlib.parse as parser
 import os
 import json
 import ast
-from py2cfg import CFGBuilder
+# from ASTlib.py2cfg import CFGBuilder
 
-file_test = '/examples/ex1.py'
+
+file_test = '/examples/ex2.py'
 
 
 if __name__ == '__main__':
@@ -14,10 +15,12 @@ if __name__ == '__main__':
     jt = ASTlib.getAST(path)
     s = ASTlib.tokenize(path)
     for i, token in enumerate(s):
-        cfg = CFGBuilder().build_from_src(f"{token['type'].upper()} {token['name']}", token['code'])
+        cfg = ASTlib.CFGBuilder().build_from_src(f"{token['type'].upper()} {token['name']}", token['code'])
         cfg.build_visual(
             f'exampleCFG_{i}', 
             'png', 
             build_keys=False,
-            show=False
+            show=False,
+            calls=False,
+            includeDefs=False
         )
