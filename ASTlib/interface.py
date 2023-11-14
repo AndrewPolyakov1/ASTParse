@@ -1,6 +1,9 @@
 import graphviz as gv
 from .pseudo import parse, unparse
+from .tokenize import tokenize
 from .py2cfg_ext import CFGBuilder
+from PIL import Image
+import io
 
 
 def build_cfg_config(code: str):
@@ -27,22 +30,74 @@ def wrapper_image(code: str, name: str):
     return create_image_from_config(config, name)
 
 
-def create_image(name: str, code: str):
-    cfg = CFGBuilder().build_from_src(name, code)
-    cfg.build_visual(
-        name,
+def create_image(code: str):  # -> PIL Image
+    """
+    Get the CFG of the code
+
+    Parameters
+    ----------
+    filepath : str
+        Filename of module to parse.
+
+    Returns
+    -------
+    Image
+        Image of CFG
+    """
+    cfg = CFGBuilder().build_from_src('', code)
+    pic_bytes = cfg.build_visual(
+        None,  # f'exampleCFG_{i}',
         'png',
         build_keys=False,
         show=False,
         calls=False,
         includeDefs=False
     )
+    return Image.open(io.BytesIO(pic_bytes))
 
 
 def translate(code: str) -> str:
+    """
+    Translate code into pseudocode
+
+    Parameters
+    ----------
+    filepath : str
+        Filename of module to parse.
+
+    Returns
+    -------
+    str
+        Code translated to Pseudocode
+    """
     tree = parse(code)
     unparsed_code = unparse(tree)
     return unparsed_code
+
+
+def wrapper(filepath: str):
+    """
+    Returns List of tuples of format
+        (name: str, code: str, Image)
+
+    Parameters
+    ----------
+    filepath : str
+        Filename of module to parse.
+
+    Returns
+    -------
+    tuple
+        (name: str, code: str, Image)
+    """
+    tokens = tokenize(filepath)
+    tuples = []
+    for token in tokens:
+        _pseudo = translate(token['code'])
+        _img = create_image(token['code'])
+        tuples.append(
+            (f'{token["type"].upper()}_{token["name"]}', _pseudo, _img))
+    return tuples
 
 
 if __name__ == "__main__":
