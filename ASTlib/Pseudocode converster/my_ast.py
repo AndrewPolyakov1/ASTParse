@@ -891,10 +891,10 @@ class _Unparser(NodeVisitor):
         self.interleave(lambda: self.write(", "), self.traverse, node.targets)
 
     def visit_Assert(self, node):
-        self.fill("if not ")
+        self.fill("IF NOT ")
         self.traverse(node.test)
         if node.msg:
-            self.write(", call error: ")
+            self.write(", CALL ERROR: ")
             self.traverse(node.msg)
 
     def visit_Yield(self, node):
@@ -914,7 +914,7 @@ class _Unparser(NodeVisitor):
             self.traverse(node.value)
 
     def visit_Raise(self, node):
-        self.fill("CALL Exception")
+        self.fill("CALL EXCEPTION")
         if not node.exc:
             if node.cause:
                 raise ValueError(f"Node can't use cause without an exception.")
@@ -932,7 +932,7 @@ class _Unparser(NodeVisitor):
         for ex in node.handlers:
             self.traverse(ex)
         if node.orelse:
-            self.fill("If no exceptions do ")
+            self.fill("If NO EXCEPTIONS DO ")
             with self.block():
                 self.traverse(node.orelse)
         if node.finalbody:
@@ -987,7 +987,7 @@ class _Unparser(NodeVisitor):
             def_str = "Class attributes"
             self.fill(def_str)
         else:
-            def_str = "Func" + " " + node.name
+            def_str = "FUNCTION" + " " + node.name
             self.fill(def_str)
             with self.delimit("(", ")"):
                 self.traverse(node.args)
@@ -1001,7 +1001,7 @@ class _Unparser(NodeVisitor):
         self._for_helper("FOR ", node)
 
     def visit_AsyncFor(self, node):
-        self._for_helper("async for ", node)
+        self._for_helper("ASYNC FOR ", node)
 
     def traverse_for(self, node):
         if isinstance(node, list):
@@ -1041,7 +1041,7 @@ class _Unparser(NodeVisitor):
         with self.block(extra=self.get_type_comment(node)):
             self.traverse(node.body)
         if node.orelse:
-            self.fill("else")
+            self.fill("ELSE")
             with self.block():
                 self.traverse(node.orelse)
 
@@ -1385,10 +1385,10 @@ class _Unparser(NodeVisitor):
     cmpops = {
         "Eq": "==",
         "NotEq": "NOT EQ",
-        "Lt": "LESS THAN",
-        "LtE": "LESS OR EQ",
-        "Gt": "MORE THAN",
-        "GtE": "MORE OR EQ",
+        "Lt": "LT THAN",
+        "LtE": "LT OR EQ",
+        "Gt": "GT THAN",
+        "GtE": "GT OR EQ",
         "Is": "IS",
         "IsNot": "IS NOT",
         "In": "IN",
@@ -1569,12 +1569,12 @@ class _Unparser(NodeVisitor):
     def visit_alias(self, node):
         self.write(node.name)
         if node.asname:
-            self.write(" as " + node.asname)
+            self.write(" AS " + node.asname)
 
     def visit_withitem(self, node):
         self.traverse(node.context_expr)
         if node.optional_vars:
-            self.write(" as ")
+            self.write(" AS ")
             self.traverse(node.optional_vars)
 
     def visit_match_case(self, node):
@@ -1658,7 +1658,7 @@ class _Unparser(NodeVisitor):
             with self.require_parens(_Precedence.TEST, node):
                 self.set_precedence(_Precedence.BOR, node.pattern)
                 self.traverse(node.pattern)
-                self.write(f" as {node.name}")
+                self.write(f" AS {node.name}")
 
     def visit_MatchOr(self, node):
         with self.require_parens(_Precedence.BOR, node):
