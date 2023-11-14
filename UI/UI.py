@@ -42,10 +42,10 @@ class TokenPreviewer:
 
         # Создаем фрейм для предпросмотра im
         self.preview_frame_im = Frame(root, bd=2, relief="solid")
-        self.preview_frame_im.place(x=800, y=50)
+        self.preview_frame_im.place(x=800, y=50, width=200, height=800)
 
         # Создаем метку для отображения изображения
-        self.image_preview = Label(self.preview_frame_im, height=40, width=50)
+        self.image_preview = Label(self.preview_frame_im)
         self.image_preview.pack()
         self.image_label = Label(self.preview_frame_im, text="Image Preview:")
         self.image_label.pack()
@@ -67,7 +67,10 @@ class TokenPreviewer:
 
             # Отображаем изображение с фиксированным размером
             try:
-                fixed_size = (400, 400)  # Задайте фиксированный размер изображения
+                fixed_size = (
+                    self.preview_frame_im.winfo_width(),
+                    self.preview_frame_im.winfo_height()
+                )
                 image = Image.open(image_file)
                 image.thumbnail(fixed_size, Image.BICUBIC)
                 self.photo_image = ImageTk.PhotoImage(image)
