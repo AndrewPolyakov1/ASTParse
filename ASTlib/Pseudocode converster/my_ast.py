@@ -1188,6 +1188,8 @@ class _Unparser(NodeVisitor):
     def visit_Name(self, node):
         if node.id == "print":
             self.write("OUTPUT")
+        elif node.id == "input":
+            self.write("INPUT")
         else:
             self.write(node.id)
 
