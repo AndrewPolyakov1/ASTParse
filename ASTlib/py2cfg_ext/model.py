@@ -5,6 +5,7 @@ Control flow graph for Python programs.
 """
 
 import collections
+import io
 from typing import Any, Deque, Tuple, List, Optional, Iterator, Set, Dict
 import ast  # type: ignore
 from _ast import Compare  # For type-hinting
@@ -646,7 +647,7 @@ class CFG(object):
 
     def build_visual(
         self,
-        filepath: str,
+        filepath: str | None,
         format: str,
         calls: bool = True,
         show: bool = True,
@@ -681,6 +682,8 @@ class CFG(object):
         graph = self._build_visual(format, calls, interactive, build_own, includeDefs = includeDefs)
         if build_keys:
             graph.subgraph(self._build_key_subgraph(format))
+        if filepath is None:
+            return graph.pipe(format=format)
         return graph.render(
             filepath, view=show, cleanup=cleanup, directory=directory
         )
