@@ -1,38 +1,5 @@
-# from tkinter import filedialog, Button, Label, Tk
-
-# def choose_file():
-#     file_path = filedialog.askopenfilename(filetypes=[("Python files", "*.py")])
-#     if file_path:
-#         label_result.config(text=f"Выбран файл: {file_path}")
-#     else:
-#         label_result.config(text="Файл не выбран")
-
-# def save_file():
-#     file_path = filedialog.asksaveasfilename(defaultextension=".jpeg", filetypes=[("JPEG files", "*.jpeg")])
-#     if file_path:
-#         label_result.config(text=f"Сохранено в: {file_path}")
-#     else:
-#         label_result.config(text="Файл не сохранен")
-
-
-# root = Tk()
-# root.title("CFG")
-# root.geometry('1200x800') 
-
-# button_choose_file = Button(root, text="Открыть файл", command=choose_file, width=12, height=1)
-
-# button_choose_file.place(x=45, y=50)
-
-# button_save_file = Button(root, text="Сохранить файл", command=save_file, width=12, height=1)
-
-# button_save_file.place(x=45, y=100)
-
-# label_result = Label(root, text="")
-# label_result.place(x=45, y=80)
-
-# root.mainloop()
-
-
+from PIL import Image, ImageTk
+import shutil
 from tkinter import Tk, Button, Label, Listbox, Frame, Text, PhotoImage, filedialog, Toplevel
 
 class TokenPreviewer:
@@ -98,11 +65,14 @@ class TokenPreviewer:
                 self.text_preview.insert("end", self.text_content)
                 self.text_preview.config(state="disabled")
 
-            # Отображаем изображение
+            # Отображаем изображение с заданным размером
             try:
-                image = PhotoImage(file=image_file)
-                self.image_preview.config(image=image)
-                self.image_preview.image = image
+                target_size = (300, 300)  # Задайте желаемый размер изображения
+                image = Image.open(image_file)
+                image = image.resize(target_size, Image.ANTIALIAS)
+                self.photo_image = ImageTk.PhotoImage(image)
+
+                self.image_preview.config(image=self.photo_image)
             except Exception as e:
                 print(f"Ошибка загрузки изображения: {e}")
 
@@ -120,11 +90,18 @@ class TokenPreviewer:
             self.selected_token = None
 
     def save_file(self):
-        if self.text_content:
+        if self.selected_token and self.text_content:
             save_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt")])
             if save_path:
+                # Сохранение текстового файла
                 with open(save_path, "w") as file:
                     file.write(self.text_content)
+
+                # Получение пути к изображению
+                image_file = self.selected_token[2]
+
+                # Сохранение изображения (копирование)
+                shutil.copy(image_file, save_path.replace(".txt", ".png"))
 
 if __name__ == "__main__":
     root = Tk()
