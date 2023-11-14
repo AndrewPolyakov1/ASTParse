@@ -35,7 +35,7 @@ class TokenPreviewer:
         self.preview_frame_txt.place(x=200, y=50)
 
         # Создаем метку для отображения текста
-        self.text_preview = Text(self.preview_frame_txt, height=40, width=60, state="disabled")
+        self.text_preview = Text(self.preview_frame_txt, height=10, width=40, state="disabled")
         self.text_preview.pack()
         self.text_label = Label(self.preview_frame_txt, text="Text Preview:")
         self.text_label.pack()
@@ -45,7 +45,7 @@ class TokenPreviewer:
         self.preview_frame_im.place(x=700, y=50)
 
         # Создаем метку для отображения изображения
-        self.image_preview = Label(self.preview_frame_im, height=40, width=60)
+        self.image_preview = Label(self.preview_frame_im, height=400, width=400)
         self.image_preview.pack()
         self.image_label = Label(self.preview_frame_im, text="Image Preview:")
         self.image_label.pack()
@@ -65,11 +65,11 @@ class TokenPreviewer:
                 self.text_preview.insert("end", self.text_content)
                 self.text_preview.config(state="disabled")
 
-            # Отображаем изображение с заданным размером
+            # Отображаем изображение с фиксированным размером
             try:
-                target_size = (300, 300)  # Задайте желаемый размер изображения
+                fixed_size = (400, 400)  # Задайте фиксированный размер изображения
                 image = Image.open(image_file)
-                image = image.resize(target_size, Image.ANTIALIAS)
+                image.thumbnail(fixed_size, Image.BICUBIC)
                 self.photo_image = ImageTk.PhotoImage(image)
 
                 self.image_preview.config(image=self.photo_image)
