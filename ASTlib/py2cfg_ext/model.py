@@ -609,13 +609,13 @@ class CFG(object):
         # them to the graph.
         for subcfg in self.classcfgs:
             subgraph = self.classcfgs[subcfg]._build_visual(
-                format=format, calls=calls, interactive=interactive,
+                format=format, calls=calls, interactive=interactive, includeDefs=includeDefs
             )
             graph.subgraph(subgraph)
 
         for subcfg in self.functioncfgs:
             subgraph = self.functioncfgs[subcfg]._build_visual(
-                format=format, calls=calls, interactive=interactive,
+                format=format, calls=calls, interactive=interactive, includeDefs=includeDefs
             )
             graph.subgraph(subgraph)
         return graph
