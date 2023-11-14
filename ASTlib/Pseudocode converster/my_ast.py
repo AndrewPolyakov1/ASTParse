@@ -29,6 +29,8 @@ from _ast import *
 from contextlib import contextmanager, nullcontext
 from enum import IntEnum, auto
 
+import ast
+
 
 def parse(source, filename='<unknown>', mode='exec', *,
           type_comments=False, feature_version=None):
@@ -1001,7 +1003,6 @@ class _Unparser(NodeVisitor):
     def visit_AsyncFor(self, node):
         self._for_helper("async for ", node)
 
-### Не знаю, как убрать range и заменить просто на [a..b]
     def traverse_for(self, node):
         if isinstance(node, list):
             for item in node:
@@ -1013,12 +1014,26 @@ class _Unparser(NodeVisitor):
     def _for_helper(self, fill, node):
         self.fill(fill)
         self.traverse(node.target)
-        self.write(" in ")
-        # self.traverse(node.iter.args[0])
-        # self.write('..')
-        # self.traverse(node.iter.args[1])
-        # self.write(']')
-        self.traverse_for(node.iter)
+
+        if isinstance(node.iter, ast.Call):
+            if (node.iter.func.id == 'range'):
+                nargs = len(node.iter.args)
+                if nargs == 1:
+                    self.write(" FROM 0 TO ")
+                    super().visit(node.iter.args[0])
+                elif nargs == 2:
+                    self.write(" FROM ")
+                    super().visit(node.iter.args[0])
+                    self.write(" TO ")
+                    super().visit(node.iter.args[1])
+                elif nargs == 3:
+                    self.write(" FROM ")
+                    super().visit(node.iter.args[0])
+                    self.write(" TO ")
+                    super().visit(node.iter.args[1])
+                    self.write(" WITH STEP ")
+                    super().visit(node.iter.args[2])
+
         with self.block(extra=self.get_type_comment(node)):
             self.traverse(node.body)
         if node.orelse:
@@ -1169,8 +1184,6 @@ class _Unparser(NodeVisitor):
     def visit_Name(self, node):
         if node.id == "print":
             self.write("OUTPUT")
-        elif node.id == "range":
-            self.write("")
         else:
             self.write(node.id)
 
