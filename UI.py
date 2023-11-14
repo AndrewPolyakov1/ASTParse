@@ -1,6 +1,7 @@
 from PIL import Image, ImageTk
 import shutil
 from tkinter import Tk, Button, Label, Listbox, Frame, Text, PhotoImage, filedialog
+import ASTlib
 
 class TokenPreviewer:
     def __init__(self, root):
@@ -19,9 +20,9 @@ class TokenPreviewer:
         self.save_file_button.place(x=45, y=100)
 
         # Создаем список токенов
-        self.tokens = [("Token 1", "tвыаплаывплоаывплвыальпьлаывпль ываьпываьлпьлыва выаьпл ыалв", "token1.png"),
-                       ("Token 2", "tАААААА", "token2.png"),
-                       ("Token 3", "token3.txt", "token3.png")]
+        self.tokens = [("Token 1", "tвыаплаывплоаывплвыальпьлаывпль ываьпываьлпьлыва выаьпл ыалв", Image.open('token1.png')),
+                       ("Token 2", "tАААААА", Image.open('token1.png')),
+                       ("Token 3", "token3.txt", Image.open('token1.png'))]
 
         # Создаем выпадающий список для отображения токенов
         self.token_listbox = Listbox(root, selectmode="single", width=16, height=len(self.tokens))
@@ -42,7 +43,7 @@ class TokenPreviewer:
 
         # Создаем фрейм для предпросмотра im
         self.preview_frame_im = Frame(root, bd=2, relief="solid")
-        self.preview_frame_im.place(x=800, y=50, width=200, height=800)
+        self.preview_frame_im.place(x=800, y=50, width=600, height=800)
 
         # Создаем метку для отображения изображения
         self.image_preview = Label(self.preview_frame_im)
@@ -69,7 +70,7 @@ class TokenPreviewer:
                     self.preview_frame_im.winfo_width(),
                     self.preview_frame_im.winfo_height()
                 )
-                image = Image.open(image_file)
+                image = image_file
                 image.thumbnail(fixed_size, Image.BICUBIC)
                 self.photo_image = ImageTk.PhotoImage(image)
 
@@ -82,6 +83,7 @@ class TokenPreviewer:
         if file_path:
             with open(file_path, "r") as file:
                 self.text_content = file.read()
+                self.tokens = ASTlib.wrapper(file_path)
                 self.text_preview.config(state="normal")
                 self.text_preview.delete(1.0, "end")
                 self.text_preview.insert("end", self.text_content)
@@ -102,9 +104,8 @@ class TokenPreviewer:
 
                 # Получение пути к изображению
                 image_file = self.selected_token[2]
-
-                # Сохранение изображения (копирование)
-                shutil.copy(image_file, save_path.replace(".txt", ".png"))
+                # Сохранение изображения 
+                image_file.save(save_path.replace(".txt", ".png"))
 
 
 
