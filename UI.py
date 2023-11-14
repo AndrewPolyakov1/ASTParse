@@ -20,9 +20,7 @@ class TokenPreviewer:
         self.save_file_button.place(x=45, y=100)
 
         # Создаем список токенов
-        self.tokens = [("Token 1", "tвыаплаывплоаывплвыальпьлаывпль ываьпываьлпьлыва выаьпл ыалв", Image.open('token1.png')),
-                       ("Token 2", "tАААААА", Image.open('token1.png')),
-                       ("Token 3", "token3.txt", Image.open('token1.png'))]
+        self.tokens = [("Token 1", "tвыаплаывплоаывплвыальпьлаывпль ываьпываьлпьлыва выаьпл ыалв", Image.open('token1.png'))]
 
         # Создаем выпадающий список для отображения токенов
         self.token_listbox = Listbox(root, selectmode="single", width=16, height=len(self.tokens))
@@ -88,6 +86,14 @@ class TokenPreviewer:
                 self.text_preview.delete(1.0, "end")
                 self.text_preview.insert("end", self.text_content)
                 self.text_preview.config(state="disabled")
+
+            self.token_listbox.destroy()
+            self.token_listbox = Listbox(root, selectmode="single", width=16, height=len(self.tokens))
+            for token in self.tokens:
+                self.token_listbox.insert("end", token[0])
+            self.token_listbox.place(x=45, y=150)
+            self.token_listbox.bind("<<ListboxSelect>>", self.show_preview)    
+
 
             # Сброс выбранного токена
             self.selected_token = None
