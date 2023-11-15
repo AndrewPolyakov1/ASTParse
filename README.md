@@ -15,27 +15,15 @@ Code for ITMO hackathon (Nov 2023)
 pip install -r requirements.txt 
 ```
 
-
-
 # Участники
 
 |Role|Name|
 |--|--|
-|Графика| Амина|
-|AST| Андрей|
-|Графика| Толян|
-|AST| Федя|
-
-# Задачки
-
-<form action="/action_page.php">
-  <input type="checkbox" name="vehicle1" value="0">
-  <label for="vehicle1"> Возможно подрубить парсер сообщений санитайзера, чтобы отлавливать в какой момент произошла утечка памяти </label><br>
-  <input type="checkbox" name="vehicle2" value="1">
-  <label for="vehicle2"> В виде графа (дерева), если будет время и желание жить - интерактивное представление </label><br>
-  <input type="checkbox" name="vehicle3" value="2" checked>
-  <label for="vehicle3"> Парс в Json</label><br><br>
-</form>
+|Псевдокод парсер| Амина|
+|Псевдокод грамматика| Леша|
+|Токенизация, сборка| Андрей|
+|UI| Толян|
+|Разнорабочий| Федя|
 
 # Интерфейс
 
@@ -44,10 +32,6 @@ pip install -r requirements.txt
 `tokenize(fn: str) -> List[dict]`
 
 `build_cfg_config(code: str) -> str` -> генерит конфиг
-
-`build_cfg_config_file(code: str, name : str) -> None`
-
-`create_image_from_file(path: str, name : str)` 
 
 `create_image_from_config(config: str, name : str)` 
 

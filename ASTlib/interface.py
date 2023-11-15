@@ -20,8 +20,8 @@ node_styles = {
 
 
 
-def build_cfg_config(code: str):
-    raise NotImplementedError
+# def build_cfg_config(code: str):
+#     raise NotImplementedError
 
 
 def build_cfg_config_file(code: str, name: str):
@@ -34,19 +34,19 @@ def create_image_from_file(path: str, name: str):
         create_image_from_config(source, name)
 
 
-def create_image_from_config(config: str, name: str):
-    dot = gv.Source(config, format='png')
-    dot.render(name).replace('\\', '/')
+def create_image_from_config(config: str, format: str) -> Image:
+    graph = gv.Source(config)
+    return Image.open(io.BytesIO(graph.pipe(format=format)))
 
 
-def wrapper_image(code: str, name: str):
-    config = build_cfg_config(code)
-    return create_image_from_config(config, name)
+# def wrapper_image(code: str, name: str):
+#     config = build_cfg_config(code)
+#     return create_image_from_config(config, name)
 
 
-def create_image(code: str):  # -> PIL Image
+def build_cfg_config(code: str) -> str:
     """
-    Get the CFG of the code
+    Get the CFG config of the code 
 
     Parameters
     ----------
@@ -55,14 +55,11 @@ def create_image(code: str):  # -> PIL Image
 
     Returns
     -------
-    Image
-        Image of CFG
     config: str
         .dot file config
     """
     cfg = CFGBuilder().build_from_src('', code)
-    pic_bytes, src = cfg.build_visual(
-        None,  # f'exampleCFG_{i}',
+    src = cfg.build_source(
         'png',
         build_keys=False,
         show=False,
@@ -70,7 +67,7 @@ def create_image(code: str):  # -> PIL Image
         cleanup=False,
         includeDefs=False
     )
-    return Image.open(io.BytesIO(pic_bytes)), src
+    return src
 
 
 def translate(code: str) -> str:
@@ -111,9 +108,10 @@ def code_to_image_and_pseudocode(filepath: str):
     tuples = []
     for token in tokens:
         _pseudo = translate(token['code'])
-        _img, src = create_image(token['code'])
+        _src = build_cfg_config(token['code'])
+        _img = create_image_from_config(_src, format='png')
         tuples.append(
-            (f'{token["type"].upper()}_{token["name"]}', _pseudo, _img, src))
+            (f'{token["type"].upper()}_{token["name"]}', _pseudo, _img, _src))
     return tuples
 
 def change_keys_colors(
@@ -148,22 +146,3 @@ def change_keys_colors(
         node_styles[ast.Raise] = (node_styles[ast.Raise][0], Raise)
     CFGBuilder.set_styles(node_styles=node_styles)
     
-
-if __name__ == "__main__":
-    config = '''
-    digraph "cluster0.tmp/FUNCTION foo" {
-	graph [compound=True fontname="DejaVu Sans Mono" label=".tmp/FUNCTION foo" pack=False rankdir=TB ranksep=0.02]
-	node [fontname="DejaVu Sans Mono"]
-	edge [fontname="DejaVu Sans Mono"]
-	1 [label="def foo(a: int):...\l" fillcolor="#FFFB81" shape=rectangle style="filled,solid"]
-	subgraph cluster0foo {
-		graph [compound=True fontname="DejaVu Sans Mono" label=foo pack=False rankdir=TB ranksep=0.02]
-		node [fontname="DejaVu Sans Mono"]
-		edge [fontname="DejaVu Sans Mono"]
-		3 [label="return a * 2\l" fillcolor="#98fb98" shape=parallelogram style="filled,solid"]
-	}
-}
-    '''
-    with open('pseudo/ex_class.py') as f:
-        create_image('tmp/im', f.read())
-

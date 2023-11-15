@@ -689,6 +689,44 @@ class CFG(object):
         ),
         graph.source
 
+    def build_source(
+        self,
+        format: str,
+        calls: bool = True,
+        show: bool = True,
+        cleanup=True,
+        directory=None,
+        interactive=False,
+        build_keys=True,
+        build_own=False,
+        diffable=None,
+        includeDefs: bool = True, 
+    ) -> str:
+        """
+        Build a visualisation of the CFG with graphviz and output it in a DOT
+        file.
+
+        Args:
+            filename: The name of the output file in which the visualisation
+                      must be saved.
+            format: The format to use for the output file (PDF, ...).
+            show: A boolean indicating whether to automatically open the output
+                  file after building the visualisation.
+        """
+
+        if diffable is not None:
+            with open(diffable, "w") as fp:
+                for block in self:
+                    print(
+                        f"{block.id} {type(block.statements[0]).__name__}",
+                        file=fp,
+                    )
+
+        graph = self._build_visual(format, calls, interactive, build_own, includeDefs = includeDefs)
+        if build_keys:
+            graph.subgraph(self._build_key_subgraph(format))
+        return graph.source
+
     def __iter__(self) -> Iterator[Block]:
         """
         Generator that yields all the blocks in the current graph, then
