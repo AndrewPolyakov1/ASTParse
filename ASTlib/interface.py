@@ -101,8 +101,8 @@ def code_to_image_and_pseudocode(filepath: str):
 
     Returns
     -------
-    tuple
-        (name: str, code: str, Image, config: str)
+    tuples: List
+        List[(name: str, code: str, Image, config: str)]
     """
     tokens = tokenize(filepath)
     tuples = []

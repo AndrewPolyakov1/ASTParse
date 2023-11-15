@@ -37,3 +37,5 @@ pip install -r requirements.txt
 
 `wrapper_image(code: str, name: str) -> path` -> генерит картинку из кода
 
+`code_to_image_and_pseudocode(filepath: str) -> List[tuple[name: str, pseudocode: str, Image, config: str]]:` -> генерит все из пути к файлу кода
+
