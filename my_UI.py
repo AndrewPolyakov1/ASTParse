@@ -1,3 +1,4 @@
+from sre_constants import SRE_FLAG_ASCII
 from PIL import Image, ImageTk
 import shutil
 from tkinter import Tk, Button, Label, Listbox, Frame, Text, PhotoImage, filedialog, ttk, Menu, Toplevel, colorchooser
@@ -47,10 +48,11 @@ class TokenPreviewer:
         self.token_label.place(anchor='e')
         self.token_label.grid(row=2, column=0, padx=50, pady=5)
 
-        self.tokens = [("Token 1", "PREVIEW", Image.open('token1.png'))]
+        self.tokens = [("Preview Function", "PREVIEW", Image.open('assets/token1.png'))]
+        _tok = [i[0] for i in self.tokens]
         # Создаем выпадающий список для отображения токенов
         self.token_combobox = ttk.Combobox(self.button_frame, 
-                                   values=self.tokens, 
+                                   values=_tok, 
                                    state="readonly", 
                                    width=30)
         
@@ -231,7 +233,7 @@ class TokenPreviewer:
 if __name__ == "__main__":
     root = Tk()
     root.tk.call("source", "azure.tcl")
-    root.tk.call("set_theme", "light")
+    root.tk.call("set_theme", "dark")
     # root.configure(bg='#F5FBEF')
 
     # style = ttk.Style()
