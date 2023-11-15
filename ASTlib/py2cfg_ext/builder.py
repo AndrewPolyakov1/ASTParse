@@ -777,3 +777,9 @@ class CFGBuilder(ast.NodeVisitor):
         for child in node.body:
             self.visit(child)
         self.current_block.add_exit(self.try_stack[0].after_block)
+
+    def set_styles(node_styles):
+        """Set new styles"""
+
+        CFG.node_styles = node_styles
+        CFG.DEFAULT = node_styles['default']
