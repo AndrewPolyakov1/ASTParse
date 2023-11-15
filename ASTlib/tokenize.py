@@ -10,8 +10,8 @@ class ListVisitor(ast.NodeVisitor):
         self.ind = indent
 
     def visit_FunctionDef(self, node):
-        print(
-            f"[{__name__}] {'':>{self.cur}}Function {node.name} {node.lineno}->{node.end_lineno}")
+        # print(
+        #     f"[{__name__}] {'':>{self.cur}}Function {node.name} {node.lineno}->{node.end_lineno}")
         self.functions.append({
             'name': node.name,
             'start': node.lineno,
@@ -22,8 +22,8 @@ class ListVisitor(ast.NodeVisitor):
         self.cur -= self.ind
 
     def visit_ClassDef(self, node):
-        print(
-            f"[{__name__}] {'':>{self.cur}}Class {node.name} {node.lineno}->{node.end_lineno}")
+        # print(
+        #     f"[{__name__}] {'':>{self.cur}}Class {node.name} {node.lineno}->{node.end_lineno}")
         self.classes.append({
             'name': node.name,
             'start': node.lineno,
@@ -131,19 +131,3 @@ def tokenize(fn: str):
         })
 
     return tokens
-
-
-if __name__ == '__main__':
-    import os
-    import astlib
-    import json
-
-    file_test = '/../examples/ex2.py'
-
-    path = os.path.dirname(os.path.abspath(__file__))
-    path += file_test
-    jt = astlib.getAST(path)
-    s = tokenize(path)
-    print(json.dumps(s, indent=4))
-    # for i in s:
-    #     print(i["code"])

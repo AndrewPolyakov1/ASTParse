@@ -108,7 +108,8 @@ def code_to_image_and_pseudocode(filepath: str):
         _src = build_cfg_config(token['code'])
         _img = create_image_from_config(_src, format='png')
         tuples.append(
-            (f'{token["type"].upper()}_{token["name"]}', _pseudo, _img, _src))
+            (f'{token["type"].upper()}_' + f'{token["name"]}', _pseudo, _img, _src))
+    # print([i[0] for i in tuples])
     return tuples
 
 def change_keys_colors(
