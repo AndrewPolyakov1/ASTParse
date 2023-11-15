@@ -1,3 +1,0 @@
-ast2json==0.3
-py2cfg==0.7.3
-graphviz==0.20.1
