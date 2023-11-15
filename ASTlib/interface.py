@@ -20,9 +20,6 @@ node_styles = {
 
 
 
-# def build_cfg_config(code: str):
-#     raise NotImplementedError
-
 
 def build_cfg_config_file(code: str, name: str):
     raise NotImplementedError
