@@ -683,10 +683,11 @@ class CFG(object):
         if build_keys:
             graph.subgraph(self._build_key_subgraph(format))
         if filepath is None:
-            return graph.pipe(format=format)
+            return graph.pipe(format=format), graph.source
         return graph.render(
             filepath, view=show, cleanup=cleanup, directory=directory
-        )
+        ),
+        graph.source
 
     def __iter__(self) -> Iterator[Block]:
         """

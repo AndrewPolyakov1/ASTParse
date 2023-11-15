@@ -16,7 +16,7 @@ if __name__ == '__main__':
     jt = ASTlib.getAST(path)
     s = ASTlib.tokenize(path)
 
-    print(ASTlib.wrapper(path))
+    print(ASTlib.code_to_image_and_pseudocode(path))
 
     # for i, token in enumerate(s):
     #     cfg = ASTlib.CFGBuilder().build_from_src(f"{token['type'].upper()} {token['name']}", token['code'])

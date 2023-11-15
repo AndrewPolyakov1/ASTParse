@@ -81,7 +81,7 @@ class TokenPreviewer:
         if file_path:
             with open(file_path, "r") as file:
                 self.text_content = file.read()
-                self.tokens = ASTlib.wrapper(file_path)
+                self.tokens = ASTlib.code_to_image_and_pseudocode(file_path)
                 self.text_preview.config(state="normal")
                 self.text_preview.delete(1.0, "end")
                 self.text_preview.insert("end", self.text_content)

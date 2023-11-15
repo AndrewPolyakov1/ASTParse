@@ -59,15 +59,16 @@ def create_image(code: str):  # -> PIL Image
         Image of CFG
     """
     cfg = CFGBuilder().build_from_src('', code)
-    pic_bytes = cfg.build_visual(
+    pic_bytes, src = cfg.build_visual(
         None,  # f'exampleCFG_{i}',
         'png',
         build_keys=False,
         show=False,
         calls=False,
+        cleanup=False,
         includeDefs=False
     )
-    return Image.open(io.BytesIO(pic_bytes))
+    return Image.open(io.BytesIO(pic_bytes)), src
 
 
 def translate(code: str) -> str:
@@ -89,7 +90,7 @@ def translate(code: str) -> str:
     return unparsed_code
 
 
-def wrapper(filepath: str):
+def code_to_image_and_pseudocode(filepath: str):
     """
     Returns List of tuples of format
         (name: str, code: str, Image)
@@ -108,9 +109,9 @@ def wrapper(filepath: str):
     tuples = []
     for token in tokens:
         _pseudo = translate(token['code'])
-        _img = create_image(token['code'])
+        _img, src = create_image(token['code'])
         tuples.append(
-            (f'{token["type"].upper()}_{token["name"]}', _pseudo, _img))
+            (f'{token["type"].upper()}_{token["name"]}', _pseudo, _img, src))
     return tuples
 
 def change_keys_colors(
