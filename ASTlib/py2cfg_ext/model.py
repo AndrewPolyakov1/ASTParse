@@ -562,7 +562,7 @@ class CFG(object):
             graph.edge(
                 str(block.id),
                 str(exit.target.id),
-                label=edgelabel,
+                label=" " if edgelabel else "",
                 _attributes={"color": edgecolor},
             )
 
