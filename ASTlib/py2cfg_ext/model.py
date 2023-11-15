@@ -276,7 +276,7 @@ class CFG(object):
         ast.For: ("hexagon", "#FFBE52"),  # Pale Orange
         ast.While: ("hexagon", "#FFBE52"),  # Pale Orange
         ast.Call: ("tab", "#E552FF"),  # Pale Purple
-        ast.Return: ("parallelogram", "#98fb98"),  # Pale Green
+        ast.Return: ("oval", "#98fb98"),  # Pale Green
         ast.Try: ("Mdiamond", "orange"),
         ast.Raise: ("house", "#98fb98"),
     }

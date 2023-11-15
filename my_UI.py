@@ -8,15 +8,15 @@ class TokenPreviewer:
     def __init__(self, root : Tk):
         self.root = root
         self.root.title("Token Previewer")
-        self.root.geometry('1350x800') 
+        self.root.geometry('1650x900') 
         self.selected_token = None
         self.text_content = None
 
-        self.style_frame = ttk.Style()
-        self.style_frame.configure('Custom.TFrame', background='#F5FBEF', borderwidth=5, relief='sunken')
+        # self.style_frame = ttk.Style()
+        # self.style_frame.configure('Custom.TFrame', background='#F5FBEF', borderwidth=5, relief='sunken')
 
-        self.style_label = ttk.Style()
-        self.style_label.configure("My.TLabel", background="#F5FBEF", borderwidth=2, padding=10, foreground="#503D42", font=("Helvetica", 16))
+        # self.style_label = ttk.Style()
+        # self.style_label.configure("My.TLabel", background="#F5FBEF", borderwidth=2, padding=10, foreground="#503D42", font=("Helvetica", 16))
 
 
         self.button_frame = ttk.Frame(root)
@@ -25,7 +25,10 @@ class TokenPreviewer:
         self.open_file_button = ttk.Button(self.button_frame,
                                            text="Открыть файл", 
                                            command=self.open_file,
-                                           style='TButton')
+                                           width=30
+                                        #    ,
+                                        #    style='TButton'
+                                           )
         self.open_file_button.grid(row=0, pady=10)
         # self.open_file_button.place(x=45, y=50)
         # self.open_file_button.pack(side='left')
@@ -34,22 +37,27 @@ class TokenPreviewer:
         self.save_file_button = ttk.Button(self.button_frame, 
                                            text="Сохранить файл", 
                                            command=self.save_file,
-                                           style='TButton')
+                                           width=30
+                                        #    style='TButton'
+                                           )
         self.save_file_button.grid(row=1, pady=10)
         # self.save_file_button.place(x=45, y=100)
         # self.save_file_button.pack(side='left')
+        self.token_label = ttk.Label(self.button_frame, text="Functions and classes")
+        self.token_label.place(anchor='e')
+        self.token_label.grid(row=2, column=0, padx=50, pady=5)
 
         self.tokens = [("Token 1", "PREVIEW", Image.open('token1.png'))]
         # Создаем выпадающий список для отображения токенов
         self.token_combobox = ttk.Combobox(self.button_frame, 
                                    values=self.tokens, 
                                    state="readonly", 
-                                   width=15)
+                                   width=30)
         
         for token in self.tokens:
             self.token_combobox.insert("end", token[0])
 
-        self.token_combobox.grid(row=2, pady=10)
+        self.token_combobox.grid(row=3, pady=10)
         self.token_combobox.bind("<<ComboboxSelected>>", self.show_preview)
 
         # self.token_listbox = Listbox(self.button_frame, 
@@ -69,31 +77,39 @@ class TokenPreviewer:
         # self.token_listbox.bind("<<ListboxSelect>>", self.show_preview)
 
         # Создаем фрейм для предпросмотра txt
-        self.preview_frame_txt = ttk.Frame(root, style='TFrame')
+        self.preview_frame_txt = ttk.Frame(root
+                                        #    , style='TFrame'
+                                           )
         # self.preview_frame_txt.pack()
         # self.preview_frame_txt.place(anchor="ne", )
         self.preview_frame_txt.grid(row=0, column=1, padx=50, pady=50)
 
         # Создаем метку для отображения txt
-        self.text_label = ttk.Label(self.preview_frame_txt, text="Text Preview", style='My.TLabel')
-        self.text_label.grid(row=0, column=0, sticky="n", padx=50, pady=20)
+        self.text_label = ttk.Label(self.preview_frame_txt, text="Text Preview", font=('Helvetica', 16)
+                                    # , style='My.TLabel'
+                                    )
+        self.text_label.grid(row=0, column=0, sticky="n", padx=50)
 
-        self.text_preview = Text(self.preview_frame_txt, height=49, width=60, state="disabled")
-        self.text_preview.grid(row=1, column=0, padx=5, pady=5)
+        self.text_preview = Text(self.preview_frame_txt, height=40, width=60, state="disabled")
+        # self.scrollb = ttk.Scrollbar(self.text_preview, command=self.text_preview.yview)
+        self.text_preview.grid(row=1, column=0, padx=5, pady=5, sticky="nw")
 
         # Создаем фрейм для предпросмотра изображения
         self.preview_frame_im = ttk.Frame(root)
         
-        self.preview_frame_im.configure(style='Custom.TFrame')
+        # self.preview_frame_im.configure(style='Custom.TFrame')
         # self.preview_frame_im.configure(background='#F5FBEF', borderwidth=5, relief='sunken')
         self.preview_frame_im.grid(row=0, column=2, pady=50)
-        self.preview_frame_im.place(x=800,
+        self.preview_frame_im.place(
+                                    x=950,
                                     y=50, 
                                     width=600, 
                                     height=800)
 
        # Создаем метку для отображения изображения
-        self.image_label = ttk.Label(self.preview_frame_im, text="Image Preview", style='My.TLabel')
+        self.image_label = ttk.Label(self.preview_frame_im, text="Image Preview"
+                                    #  , style='My.TLabel'
+                                     )
         self.image_label.place(anchor=CENTER, rely=10)
         self.image_label.grid(row=0, column=0, padx=50, pady=5)
         
@@ -133,29 +149,31 @@ class TokenPreviewer:
                 self.image_preview.config(image=self.photo_image)
             except Exception as e:
                 print(f"Ошибка загрузки изображения: {e}")
-            self.style_frame.configure('Custom.TFrame', background='#F5FBEF', borderwidth=0, relief='sunken')
+            # self.style_frame.configure('Custom.TFrame', background='#F5FBEF', borderwidth=0, relief='sunken')
 
     def open_file(self):
         file_path = filedialog.askopenfilename(filetypes=[("All files", "*.*")])
         if file_path:
             with open(file_path, "r") as file:
                 self.text_content = file.read()
-                self.tokens = ASTlib.wrapper(file_path)
+                self.tokens = ASTlib.code_to_image_and_pseudocode(file_path)
                 self.text_preview.config(state="normal")
                 self.text_preview.delete(1.0, "end")
                 self.text_preview.insert("end", self.text_content)
                 self.text_preview.config(state="disabled")
 
             self.token_combobox.destroy()
+            _tokens = [i[0] for i in self.tokens]
             self.token_combobox = ttk.Combobox(self.button_frame, 
-                                   values=self.tokens, 
+                                   values=_tokens, 
                                    state="readonly", 
-                                   width=16)
+                                   width=30)
         
-            for token in self.tokens:
-                self.token_combobox.insert("end", token[0])
+            # for token in self.tokens:
+            #     self.token_combobox.insert("end", 'a')
+            #     print(token[0])
 
-            self.token_combobox.grid(row=2, pady=10)
+            self.token_combobox.grid(row=3, pady=10)
             self.token_combobox.bind("<<ComboboxSelected>>", self.show_preview)
 
 

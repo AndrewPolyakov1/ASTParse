@@ -46,4 +46,9 @@ class Sort:
         return src
 
 def foo():
+    for i in range(10):
+        if 1 > 2:
+            return 2
+        else:
+            print(1)
     return 42
