@@ -12,7 +12,7 @@ Code for ITMO hackathon (Nov 2023)
 Установить библиотеки
 
 ```
-pip install -r reqirements.txt 
+pip install -r requirements.txt 
 ```
 
 
