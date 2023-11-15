@@ -850,7 +850,7 @@ class _Unparser(NodeVisitor):
         self.fill()
         for target in node.targets:
             self.traverse(target)
-            self.write(" = ")
+            self.write(" := ")
         self.traverse(node.value)
         if type_comment := self.get_type_comment(node):
             self.write(type_comment)
@@ -1044,6 +1044,7 @@ class _Unparser(NodeVisitor):
             self.fill("ELSE")
             with self.block():
                 self.traverse(node.orelse)
+        self.fill("END FOR")
 
     def visit_If(self, node):
         self.fill("IF ")
@@ -1062,6 +1063,7 @@ class _Unparser(NodeVisitor):
             self.fill("ELSE")
             with self.block():
                 self.traverse(node.orelse)
+        self.fill("END IF ")
 
     def visit_While(self, node):
         self.fill("WHILE ")
@@ -1385,12 +1387,12 @@ class _Unparser(NodeVisitor):
             self.traverse(node.right)
 
     cmpops = {
-        "Eq": "==",
-        "NotEq": "NOT EQ",
-        "Lt": "LT THAN",
-        "LtE": "LT OR EQ",
-        "Gt": "GT THAN",
-        "GtE": "GT OR EQ",
+        "Eq": "=",
+        "NotEq": "≠",
+        "Lt": "<",
+        "LtE": "≤",
+        "Gt": ">",
+        "GtE": "≥",
         "Is": "IS",
         "IsNot": "IS NOT",
         "In": "IN",
