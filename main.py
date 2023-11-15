@@ -1,5 +1,4 @@
 import ASTlib
-import ASTlib.parse as parser
 import os
 import json
 import ast
@@ -13,9 +12,7 @@ file_test = '/examples/ex2.py'
 if __name__ == '__main__':
     path = os.path.dirname(os.path.abspath(__file__))
     path += file_test
-    jt = ASTlib.getAST(path)
     s = ASTlib.tokenize(path)
-
     print(ASTlib.code_to_image_and_pseudocode(path))
 
     # for i, token in enumerate(s):
