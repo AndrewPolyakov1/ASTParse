@@ -1,5 +1,5 @@
 """
-Module for parsing code into pseudocode and ploting CFG
+Module for parsing code into pseudocode and ploting CFG.
 """
 
 from .tokenize import tokenize

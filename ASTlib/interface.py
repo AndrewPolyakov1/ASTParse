@@ -57,6 +57,8 @@ def create_image(code: str):  # -> PIL Image
     -------
     Image
         Image of CFG
+    config: str
+        .dot file config
     """
     cfg = CFGBuilder().build_from_src('', code)
     pic_bytes, src = cfg.build_visual(
@@ -93,7 +95,7 @@ def translate(code: str) -> str:
 def code_to_image_and_pseudocode(filepath: str):
     """
     Returns List of tuples of format
-        (name: str, code: str, Image)
+        (name: str, code: str, Image, config: str)
 
     Parameters
     ----------
@@ -103,7 +105,7 @@ def code_to_image_and_pseudocode(filepath: str):
     Returns
     -------
     tuple
-        (name: str, code: str, Image)
+        (name: str, code: str, Image, config: str)
     """
     tokens = tokenize(filepath)
     tuples = []
