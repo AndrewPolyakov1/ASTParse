@@ -97,8 +97,8 @@ class TokenPreviewer:
 
     def show_preview(self, event):
         selected_index = self.token_combobox.current()
-        if selected_index:
-            self.selected_token = self.tokens[selected_index[0]]
+        if selected_index >= 0:
+            self.selected_token = self.tokens[selected_index]
             text_content = str(self.selected_token[1]) 
             image_file = self.selected_token[2]
 
