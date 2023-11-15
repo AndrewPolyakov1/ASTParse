@@ -778,6 +778,31 @@ class CFGBuilder(ast.NodeVisitor):
             self.visit(child)
         self.current_block.add_exit(self.try_stack[0].after_block)
 
+    # def get_styles():
+    #     """Get styles"""
+
+    #     return {
+    #         "input": ("parallelogram", "#afeeee"),  # Pale Turquoise
+    #         "default": ("rectangle", "#FFFB81"),  # Pale Yellow
+    #         ast.If: ("diamond", "#FF6752"),  # Pale Red
+    #         ast.For: ("hexagon", "#FFBE52"),  # Pale Orange
+    #         ast.While: ("hexagon", "#FFBE52"),  # Pale Orange
+    #         ast.Call: ("tab", "#E552FF"),  # Pale Purple
+    #         ast.Return: ("parallelogram", "#98fb98"),  # Pale Green
+    #         ast.Try: ("Mdiamond", "orange"),
+    #         ast.Raise: ("house", "#98fb98"),
+    #     }
+    # node_styles = {
+    # "input": ("parallelogram", "#afeeee"),  # Pale Turquoise
+    # "default": ("rectangle", "#FFFB81"),  # Pale Yellow
+    # ast.If: ("diamond", "#FF6752"),  # Pale Red
+    # ast.For: ("hexagon", "#FFBE52"),  # Pale Orange
+    # ast.While: ("hexagon", "#FFBE52"),  # Pale Orange
+    # ast.Call: ("tab", "#E552FF"),  # Pale Purple
+    # ast.Return: ("parallelogram", "#98fb98"),  # Pale Green
+    # ast.Try: ("Mdiamond", "orange"),
+    # ast.Raise: ("house", "#98fb98"),
+    # }
     def set_styles(node_styles):
         """Set new styles"""
 

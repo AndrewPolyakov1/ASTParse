@@ -1,11 +1,11 @@
 from PIL import Image, ImageTk
 import shutil
-from tkinter import Tk, Button, Label, Listbox, Frame, Text, PhotoImage, filedialog, ttk
+from tkinter import Tk, Button, Label, Listbox, Frame, Text, PhotoImage, filedialog, ttk, Menu, Toplevel, colorchooser
 import ASTlib
 from tkinter.constants import CENTER
 
 class TokenPreviewer:
-    def __init__(self, root):
+    def __init__(self, root : Tk):
         self.root = root
         self.root.title("Token Previewer")
         self.root.geometry('1350x800') 
@@ -93,6 +93,11 @@ class TokenPreviewer:
         
         self.image_preview = ttk.Label(self.preview_frame_im)
         self.image_preview.grid(row=1, column=0)
+
+        # Создание меню
+        self.mainmenu = Menu(self.root)
+        self.root.config(menu=self.mainmenu)
+        self.mainmenu.add_command(label="Кастомизация", command=self.customization)
  
 
     def show_preview(self, event):
@@ -163,6 +168,38 @@ class TokenPreviewer:
                 image_file = self.selected_token[2]
                 # Сохранение изображения 
                 image_file.save(save_path.replace(".txt", ".png"))
+
+    customizationExists = False
+
+
+    def customization(self):
+        if not self.customizationExists:
+            self.customizationExists = True
+                
+            self.color_customization_window = Toplevel(self.root) 
+            def on_closing():
+                self.customizationExists = False
+                self.color_customization_window.destroy()
+            
+            def choose_color(element : str, key):
+                color_code = colorchooser.askcolor(title ="Choose color for" ) 
+            self.color_customization_window.protocol('WM_DELETE_WINDOW', on_closing)
+            self.color_customization_window.geometry('600x400')
+            self.color_customization_window.title("Кастомизация") 
+            # Добавляем виджеты в новое окно
+            label = Label(self.color_customization_window, text="новое окно!")
+            label.pack(padx=10, pady=10)
+
+            # Пример кнопки в новом окне
+            button = Button(self.color_customization_window, text="Нажми меня")
+            button.pack(padx=10, pady=10)
+
+            self.color_customization_window.mainloop()
+        else:
+            self.color_customization_window.wm_state('normal')
+            self.color_customization_window.deiconify()
+            self.color_customization_window.lift()
+            self.color_customization_window.focus()
 
 
 if __name__ == "__main__":
