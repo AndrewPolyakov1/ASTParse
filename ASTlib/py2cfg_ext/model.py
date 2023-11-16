@@ -229,6 +229,8 @@ class Link(object):
             A string containing the source code.
         """
         if self.exitcase:
+            if self.source.pseudocode:
+                return unparse(self.exitcase)
             return astor.to_source(self.exitcase)
         return ""
 
