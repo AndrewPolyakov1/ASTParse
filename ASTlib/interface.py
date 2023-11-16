@@ -30,7 +30,7 @@ def create_image_from_config(config: str, format: str) -> Image:
 #     return create_image_from_config(config, name)
 
 
-def build_cfg_config(code: str) -> str:
+def build_cfg_config(code: str, pseudocode: bool = True) -> str:
     """
     Get the CFG config of the code 
 
@@ -44,7 +44,7 @@ def build_cfg_config(code: str) -> str:
     config: str
         .dot file config
     """
-    cfg = CFGBuilder().build_from_src('', code)
+    cfg = CFGBuilder(pseudocode=pseudocode).build_from_src('', code)
     src = cfg.build_source(
         'png',
         build_keys=False,
@@ -75,7 +75,8 @@ def translate(code: str) -> str:
     return unparsed_code
 
 
-def code_to_image_and_pseudocode(filepath: str, format: str = 'png'):
+
+def code_to_image_and_pseudocode(filepath: str, pseudocode: bool = False, format: str = 'png'):
     """
     Returns List of tuples of format
         (name: str, code: str, Image, config: str)
@@ -94,7 +95,7 @@ def code_to_image_and_pseudocode(filepath: str, format: str = 'png'):
     tuples = []
     for token in tokens:
         _pseudo = translate(token['code'])
-        _src = build_cfg_config(token['code'])
+        _src = build_cfg_config(token['code'], pseudocode=pseudocode)
         _img = create_image_from_config(_src, format='png')
         tuples.append(
             (f'{token["type"].upper()}_' + f'{token["name"]}', _pseudo, _img, _src))
