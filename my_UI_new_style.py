@@ -362,10 +362,10 @@ class TokenPreviewer:
 
     def save_file(self):
         if self.selected_token:
-            save_path = filedialog.asksaveasfilename(defaultextension=None, filetypes=[("Text, pseudo, and dot files", f"*.txt *.{self.customizationWindow.cur_format} *.dot")])
+            save_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text, pseudo, and dot files", ".txt")])
             if save_path:
                 # Сохранение текстового файла
-                with open(save_path, "w") as file:
+                with open(save_path, "w", encoding="utf8") as file:
                     # Получаем содержимое виджета ScrolledText
                     text_content = self.text.get("1.0", "end-1c")
                     file.write(text_content)
@@ -373,7 +373,7 @@ class TokenPreviewer:
                 # Получение пути к изображению
                 image_file = self.selected_token[2]
                 # Сохранение изображения 
-                image_file.save(save_path.replace(".txt", f".{self.customizationWindow.cur_format}"))
+                image_file.save(save_path.replace(".txt", ".png"))
 
                 # Проверяем состояние чекбокса и сохраняем файл в формате .dot, если чекбокс отмечен
                 if self.checkbutton_save_dot.instate(['selected']):
