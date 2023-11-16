@@ -10,12 +10,19 @@ class TokenPreviewer:
     def __init__(self, root : Tk):
         self.root = root
         self.root.title("Token Previewer")
+        # root.update_idletasks()
         self.root.geometry('1650x900') 
+        # self.window_width = screen_width * .01
+        # self.window_height = 900
+        # self.root.geometry("%dx%d" % (self.window_width, self.window_height))
         self.selected_token = None
         self.text_content = None
     
         self.button_frame = ttk.Frame(root)
         self.button_frame.grid(row=0, column=0, padx=50, sticky='n', pady= 50)
+        # self.button_frame.pack(expand=True)
+        # self.button_frame.pack_propagate(False)
+        
         #Кнопка открыть файл
         self.open_file_button = ttk.Button(self.button_frame,
                                            text="Открыть файл", 
@@ -58,12 +65,15 @@ class TokenPreviewer:
         # self.preview_frame_txt.pack()
         # self.preview_frame_txt.place(anchor="ne", )
         self.preview_frame_txt.grid(row=0, column=1, padx=50, pady=50)
+        self.preview_frame_txt.pack_propagate(False)
 
         # Создаем метку для отображения txt
-        self.text_label = ttk.Label(self.preview_frame_txt, text="Text Preview", font=('Helvetica', 16)
+        self.text_label = ttk.Label(self.preview_frame_txt, text="Pceudo Preview", font=(None, 16)
                                     # , style='My.TLabel'
                                     )
         self.text_label.grid(row=0, column=0, sticky="n", padx=50)
+
+        # self.scrollbar = Scrollbar(self.)
 
         self.text_preview = Text(self.preview_frame_txt, height=40, width=60, state="disabled")
         # self.scrollb = ttk.Scrollbar(self.text_preview, command=self.text_preview.yview)
@@ -78,9 +88,12 @@ class TokenPreviewer:
                                     y=50, 
                                     width=600, 
                                     height=800)
+        self.preview_frame_im.pack_propagate(False)
 
        # Создаем метку для отображения изображения
+
         self.image_label = ttk.Label(self.preview_frame_im, text="Image Preview")
+
         self.image_label.place(anchor=CENTER, rely=10)
         self.image_label.grid(row=0, column=0, padx=50, pady=5)
         
@@ -153,7 +166,7 @@ class TokenPreviewer:
 
     def save_file(self):
         if self.selected_token:
-            save_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt")])
+            save_path = filedialog.asksaveasfilename(defaultextension=None, filetypes=[("Text and pceudo files", "*.txt *.png")])
             if save_path:
                 # Сохранение текстового файла
                 with open(save_path, "w") as file:
@@ -202,7 +215,8 @@ class TokenPreviewer:
 if __name__ == "__main__":
     root = Tk()
     root.tk.call("source", "azure.tcl")
-    root.tk.call("set_theme", "dark")
+    root.tk.call("set_theme", "light")
+    root.resizable(True, True)
     # root.configure(bg='#F5FBEF')
 
     # style = ttk.Style()

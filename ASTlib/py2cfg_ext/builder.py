@@ -804,6 +804,14 @@ class CFGBuilder(ast.NodeVisitor):
     # ast.Try: ("Mdiamond", "orange"),
     # ast.Raise: ("house", "#98fb98"),
     # }
+    
+    def get_key_graph_bytes(format : str = 'png'):
+
+        cfg = CFG("cluster_KEY")
+        keys = cfg._build_key_subgraph(format=format)
+        return keys.pipe(format=format)
+        
+    
     def set_styles(node_styles):
         """Set new styles"""
 

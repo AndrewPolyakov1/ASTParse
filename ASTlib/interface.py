@@ -1,23 +1,12 @@
 import graphviz as gv
 from .pseudo import parse, unparse
 from .tokenize import tokenize
-from .py2cfg_ext import CFGBuilder
+from .py2cfg_ext import CFGBuilder, CFG
 from PIL import Image
 import io
 import ast
 
-node_styles = {
-        "input": ("parallelogram", "#afeeee"),  # Pale Turquoise
-        "default": ("rectangle", "#FFFB81"),  # Pale Yellow
-        ast.If: ("diamond", "#FF6752"),  # Pale Red
-        ast.For: ("hexagon", "#FFBE52"),  # Pale Orange
-        ast.While: ("hexagon", "#FFBE52"),  # Pale Orange
-        ast.Call: ("tab", "#E552FF"),  # Pale Purple
-        ast.Return: ("parallelogram", "#98fb98"),  # Pale Green
-        ast.Try: ("Mdiamond", "orange"),
-        ast.Raise: ("house", "#98fb98"),
-    }
-
+node_styles = CFG.node_styles
 
 
 
@@ -86,7 +75,8 @@ def translate(code: str) -> str:
     return unparsed_code
 
 
-def code_to_image_and_pseudocode(filepath: str, pseudocode: bool = False):
+
+def code_to_image_and_pseudocode(filepath: str, pseudocode: bool = False, format: str = 'png'):
     """
     Returns List of tuples of format
         (name: str, code: str, Image, config: str)
@@ -113,34 +103,53 @@ def code_to_image_and_pseudocode(filepath: str, pseudocode: bool = False):
     return tuples
 
 def change_keys_colors(
-        input: str | None = None,
-        default: str | None = None,
-        If: str | None = None,
-        For: str | None = None,
-        While: str | None = None,
-        Call: str | None = None,
-        Return: str | None = None,
-        Try: str | None = None,
-        Raise: str | None = None,
+        new_node_colors : dict,
+        # input: str | None = None,
+        # default: str | None = None,
+        # If: str | None = None,
+        # For: str | None = None,
+        # While: str | None = None,
+        # Call: str | None = None,
+        # Return: str | None = None,
+        # Try: str | None = None,
+        # Raise: str | None = None,
 ):
     """change colors of generated images"""
-    if isinstance(input, str):
-        node_styles['input'] = (node_styles['input'][0], input)
-    if isinstance(default, str):
-        node_styles['default'] = (node_styles['default'][0], default)
-    if isinstance(If, str):
-        node_styles[ast.If] = (node_styles[ast.If][0], If)
-    if isinstance(For, str):
-        node_styles[ast.For] = (node_styles[ast.For][0], For)
-    if isinstance(While, str):
-        node_styles[ast.While] = (node_styles[ast.While][0], While)
-    if isinstance(Call, str):
-        node_styles[ast.Call] = (node_styles[ast.Call][0], Call)
-    if isinstance(Return, str):
-        node_styles[ast.Return] = (node_styles[ast.Return][0], Return)
-    if isinstance(Try, str):
-        node_styles[ast.Try] = (node_styles[ast.Try][0], Try)
-    if isinstance(Raise, str):
-        node_styles[ast.Raise] = (node_styles[ast.Raise][0], Raise)
+    # if isinstance(input, str):
+    node_styles['input'] = (node_styles['input'][0], new_node_colors['input'])
+    # if isinstance(default, str):
+    node_styles['default'] = (node_styles['default'][0], new_node_colors['default'])
+    # if isinstance(If, str):
+    node_styles[ast.If] = (node_styles[ast.If][0], new_node_colors['If'])
+    # if isinstance(For, str):
+    node_styles[ast.For] = (node_styles[ast.For][0], new_node_colors['For'])
+    # if isinstance(While, str):
+    node_styles[ast.While] = (node_styles[ast.While][0], new_node_colors['While'])
+    # if isinstance(Call, str):
+    node_styles[ast.Call] = (node_styles[ast.Call][0], new_node_colors['Call'])
+    # if isinstance(Return, str):
+    node_styles[ast.Return] = (node_styles[ast.Return][0], new_node_colors['Return'])
+    # if isinstance(Try, str):
+    node_styles[ast.Try] = (node_styles[ast.Try][0], new_node_colors['Try'])
+    # if isinstance(Raise, str):
+    node_styles[ast.Raise] = (node_styles[ast.Raise][0], new_node_colors['Raise'])
     CFGBuilder.set_styles(node_styles=node_styles)
     
+def get_keys_colors():
+    return {
+        "input": node_styles['input'][1],
+        "default": node_styles['default'][1],  
+        "If": node_styles[ast.If][1],  
+        "For": node_styles[ast.For][1],  
+        "While": node_styles[ast.While][1],  
+        "Call": node_styles[ast.Call][1],  
+        "Return": node_styles[ast.Return][1],  
+        "Try": node_styles[ast.Try][1],
+        "Raise": node_styles[ast.Raise][1],
+    }
+def get_keys_image():
+    return Image.open(io.BytesIO(CFGBuilder.get_key_graph_bytes()))
+
+def get_supported_formats():
+    formats=['png', 'svg', 'jpg']
+    return formats

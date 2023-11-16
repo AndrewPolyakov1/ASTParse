@@ -7,7 +7,10 @@ class TokenPreviewer:
     def __init__(self, root):
         self.root = root
         self.root.title("Token Previewer")
-        self.root.geometry('1350x800') 
+        # self.root.geometry('1350x800') 
+        self.window_width = 1350
+        self.window_height = 800
+        self.root.geometry("%dx%d" % (self.window_width, self.window_height))
         self.selected_token = None
         self.text_content = None
 
@@ -20,7 +23,7 @@ class TokenPreviewer:
         self.save_file_button.place(x=45, y=100)
 
         # Создаем список токенов
-        self.tokens = [("Token 1", "tвыаплаывплоаывплвыальпьлаывпль ываьпываьлпьлыва выаьпл ыалв", Image.open('token1.png'))]
+        self.tokens = [("Token 1", "tвыаплаывплоаывплвыальпьлаывпль ываьпываьлпьлыва выаьпл ыалв", Image.open('assets/token1.png'))]
 
         # Создаем выпадающий список для отображения токенов
         self.token_listbox = Listbox(root, selectmode="single", width=16, height=len(self.tokens))
