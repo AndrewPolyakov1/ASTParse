@@ -41,7 +41,7 @@ def create_image_from_config(config: str, format: str) -> Image:
 #     return create_image_from_config(config, name)
 
 
-def build_cfg_config(code: str) -> str:
+def build_cfg_config(code: str, pseudocode: bool = False) -> str:
     """
     Get the CFG config of the code 
 
@@ -55,7 +55,7 @@ def build_cfg_config(code: str) -> str:
     config: str
         .dot file config
     """
-    cfg = CFGBuilder().build_from_src('', code)
+    cfg = CFGBuilder(pseudocode=pseudocode).build_from_src('', code)
     src = cfg.build_source(
         'png',
         build_keys=False,

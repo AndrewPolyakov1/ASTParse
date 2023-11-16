@@ -41,9 +41,10 @@ class Block(object):
         "func_blocks",
         "highlight",
         "outline",
+        "pseudocode"
     )
 
-    def __init__(self, id: int) -> None:
+    def __init__(self, id: int, pseudocode: bool) -> None:
         # Id of the block.
         self.id = id
         # Statements in the block.
@@ -61,6 +62,7 @@ class Block(object):
         self.highlight: bool = False
         # Debugger at this block
         self.outline: bool = False
+        self.pseudocode = pseudocode
 
     def __iter__(self):
         return iter(self.statements)
@@ -818,7 +820,7 @@ class CFG(object):
         lst = list(self) if lst is None else lst  # Already sorted by lineno
         return _bsearch(lst, 0, len(lst) - 1, lineno)
 
-    outlined_block = Block(0)
+    outlined_block = Block(0, False)
     highlighted_blocks: List[Block] = []
 
     def outline_block(self, lineno, lst=None) -> int:
