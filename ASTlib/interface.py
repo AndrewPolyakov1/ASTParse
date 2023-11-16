@@ -86,7 +86,7 @@ def translate(code: str) -> str:
     return unparsed_code
 
 
-def code_to_image_and_pseudocode(filepath: str):
+def code_to_image_and_pseudocode(filepath: str, pseudocode: bool = False):
     """
     Returns List of tuples of format
         (name: str, code: str, Image, config: str)
@@ -105,7 +105,7 @@ def code_to_image_and_pseudocode(filepath: str):
     tuples = []
     for token in tokens:
         _pseudo = translate(token['code'])
-        _src = build_cfg_config(token['code'])
+        _src = build_cfg_config(token['code'], pseudocode=pseudocode)
         _img = create_image_from_config(_src, format='png')
         tuples.append(
             (f'{token["type"].upper()}_' + f'{token["name"]}', _pseudo, _img, _src))
