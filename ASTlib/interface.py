@@ -41,7 +41,7 @@ def create_image_from_config(config: str, format: str) -> Image:
 #     return create_image_from_config(config, name)
 
 
-def build_cfg_config(code: str, pseudocode: bool = False) -> str:
+def build_cfg_config(code: str, pseudocode: bool = True) -> str:
     """
     Get the CFG config of the code 
 
