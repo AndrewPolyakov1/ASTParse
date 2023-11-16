@@ -1,4 +1,4 @@
-# Py2Art (ASTParse)
+# ASTParse (Py2Art)
 Code for ITMO hackathon (Nov 2023)
 
 # Тема
@@ -20,12 +20,14 @@ pip install -r requirements.txt
 | Казаков Алексей   | архитектура, трансляция Python в псевдокод      |
 | Васильев Анатолий | UI                                              |
 
-# Интерфейс Py2Art
+# Интерфейс py2art
 `save_image(path: str, config: str, format: str) -> None` - рендерит изображение формата `format` на основе dot-конфига `config` в файл `{path}.{format}`
 
 `def build_cfg_config(code: str, pseudocode: bool = True) -> str` - строит CFG на основе исходного кода `code` в формате dot
 
 `translate(code: str) -> str` - преобразует исходный код Python в псевдокод
+
+`code_to_image_and_pseudocode(filepath: str, pseudocode: bool = False, format: str = 'png') -> List(Tuple(str, str, str))` - на основе файла с исходным кодом создает псевдокод и CFG
 
 `change_keys_colors(new_node_colors : dict) -> None` - изменяет цвета элементов CFG
      
