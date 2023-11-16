@@ -385,7 +385,12 @@ class TokenPreviewer:
                 # Получение пути к изображению
                 image_file = self.selected_token[2]
                 # Сохранение изображения 
-                image_file.save(save_path.replace(".txt", ".png"))
+
+                if self.customizationWindow.cur_format == "png":
+                    image_file.save(save_path.replace(".txt", ".png"))
+                else:
+                    save_image(save_path.replace(".txt", ""), self.selected_token[3], self.customizationWindow.cur_format)
+
 
                 # Проверяем состояние чекбокса и сохраняем файл в формате .dot, если чекбокс отмечен
                 if self.checkbutton_save_dot.instate(['selected']):

@@ -21,8 +21,19 @@ def create_image_from_file(path: str, name: str):
 
 
 def create_image_from_config(config: str, format: str) -> Image:
-    graph = gv.Source(config)
-    return Image.open(io.BytesIO(graph.pipe(format=format)))
+    if format == "png":
+        graph = gv.Source(config)
+        return Image.open(io.BytesIO(graph.pipe(format=format)))
+    
+    # s = gv.Source(c)
+    # with open('tmp.pdf', 'wb') as fl:
+    #     fl.write(s.pipe(format='pdf'))
+
+def save_image(path: str, config: str, format: str):
+    s = gv.Source(config)
+    with open(path + "." + format, 'wb') as fl:
+        fl.write(s.pipe(format=format))
+    
 
 
 # def wrapper_image(code: str, name: str):
