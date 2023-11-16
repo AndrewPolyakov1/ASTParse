@@ -228,6 +228,15 @@ class TokenPreviewer:
 
         self.combobox_tokens.bind("<<ComboboxSelected>>", self.show_preview)
 
+        # 1-7 - Create checkbutton for pseudocode format
+        self.checkbutton_pseudo = ttk.Checkbutton(self.frame_box_button,
+                                    text="pseudocode",
+                                    variable=BooleanVar(), 
+                                    onvalue=True,
+                                    offvalue=False)
+        self.checkbutton_pseudo.grid(row=5, column=0, pady=5)
+
+
         # 2 Create Frame for ScrolledTexts and Labels
 
         self.frame_box_txt = ttk.Frame(self.frame_gr1, style='Card.TFrame', padding={10, 10, 10, 10})
@@ -339,7 +348,10 @@ class TokenPreviewer:
         if file_path:
             with open(file_path, "r") as file:
                 self.text_content = file.read()
-                self.tokens = ASTlib.code_to_image_and_pseudocode(file_path, self.customizationWindow.cur_format)
+                if self.checkbutton_pseudo.instate(['selected']):
+                    self.tokens = ASTlib.code_to_image_and_pseudocode(file_path, pseudocode = True)
+                else:
+                    self.tokens = ASTlib.code_to_image_and_pseudocode(file_path, pseudocode = False)
                 self.text_ini.config(state="normal")
                 self.text_ini.delete(1.0, "end")
                 self.text_ini.insert("end", self.text_content)
