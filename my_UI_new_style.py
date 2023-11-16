@@ -411,10 +411,14 @@ class TokenPreviewer:
             for index, token in enumerate(self.tokens):
                 save_path = f"{token[0]}_{index}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
 
-                with open(f"{folder_path}/{save_path}.txt", "w") as file:
+                with open(f"{folder_path}/{save_path}.txt", "w", encoding="utf8") as file:
                     file.write(str(token[1]))
+                
+                if self.customizationWindow.cur_format == "png":
+                    token[2].save(f"{folder_path}/{save_path}.png")
+                else:
+                    ASTlib.save_image(f"{folder_path}/{save_path}", token[3], self.customizationWindow.cur_format)
 
-                token[2].save(f"{folder_path}/{save_path}.png")
 
                 if self.checkbutton_save_dot.instate(['selected']):
                     with open(f"{folder_path}/{save_path}.dot", "w") as dot_file:
