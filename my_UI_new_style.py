@@ -1,6 +1,7 @@
 from sre_constants import SRE_FLAG_ASCII
 from tkinter import *
 from PIL import Image, ImageTk
+from datetime import datetime
 import shutil
 from tkinter import Tk, Button, Label, Listbox, Frame, Text, PhotoImage, filedialog, ttk, Menu, Toplevel, colorchooser, Scrollbar, scrolledtext, LabelFrame
 import ASTlib
@@ -151,7 +152,10 @@ class TokenPreviewer:
     def __init__(self, root : Tk):
         self.root = root
         self.root.title("PyGraphViz")
-        self.root.geometry('1650x900')
+        self.screen_width_max = self.root.winfo_screenwidth()
+        self.screen_height_max = self.root.winfo_screenheight()
+        self.root.maxsize(self.screen_width_max, self.screen_height_max)
+        # self.root.geometry('1650x900')
         self.selected_token = None
         self.text_content = None
 
@@ -173,21 +177,35 @@ class TokenPreviewer:
         self.button_open = ttk.Button(self.frame_box_button,
                                       text='Открыть файл',
                                       command=self.open_file,
-                                      width=30)
+                                      width=25)
         self.button_open.grid(row=0, column=0, padx=10, pady=5)
 
         # 1-2 - Button - save file
         self.button_save = ttk.Button(self.frame_box_button,
                                       text="Сохранить файл",
                                       command=self.save_file,
-                                      width=30)
+                                      width=25)
         self.button_save.grid(row=1, column=0, padx=10, pady=5)
 
+        # 1-3 Frame - save_all
+        self.frame_save_all = ttk.Frame(self.frame_box_button)
+        self.frame_save_all.grid(row=2, column=0, padx=10, pady=5)
+
         # 1-3 - Flag - save all files
-        self.button_save_all = ttk.Checkbutton(self.frame_box_button,
+        self.button_save_all = ttk.Button(self.frame_save_all,
                                           text= "Сохранить все",
-                                          command=self.save_file_all)
-        self.button_save_all.grid(row=2, column=0, padx=10, pady=5)
+                                          command=self.save_file_all,
+                                          width=15)
+        self.button_save_all.grid(row=0, column=0, padx=0, pady=5)
+
+        # 1-3-1 CheckButton - save dot format
+
+        self.checkbutton_save_dot = ttk.Checkbutton(self.frame_save_all,
+                                                    text = '.dot',
+                                                    variable=BooleanVar(),
+                                                    onvalue=True,
+                                                    offvalue=False)
+        self.checkbutton_save_dot.grid(row=0, column=1, padx=3, pady=5)
 
         # 1-4 - Label for combobox
         self.label_tokens = ttk.Label(self.frame_box_button,
@@ -202,7 +220,7 @@ class TokenPreviewer:
         self.combobox_tokens = ttk.Combobox(self.frame_box_button,
                                             value=_tok,
                                             state='readonly',
-                                            width=30)
+                                            width=25)
         self.combobox_tokens.grid(row=4, column=0, pady=10)
 
         for token in self.tokens:
@@ -226,7 +244,8 @@ class TokenPreviewer:
 
         self.text = scrolledtext.ScrolledText(self.frame_box_txt, 
                                               font=(None, 10),
-                                              height=15)
+                                              height=15,
+                                              width=35)
         self.text.grid(row=1, column=0)
 
         # 2-3 Create Label for second ScrollText
@@ -240,13 +259,16 @@ class TokenPreviewer:
 
         self.text_ini = scrolledtext.ScrolledText(self.frame_box_txt, 
                                               font=(None, 10),
-                                              height=15)
+                                              height=15,
+                                              width=35)
         self.text_ini.grid(row=3, column=0, pady=10)
 
         # 3 - Create Frame for Image
 
-        self.frame_general_image = ttk.Frame(self.frame_general, style='Card.TFrame', padding={10, 10, 10 , 10})
-        self.frame_general_image.grid(row=0, column=1, padx=10, pady=20, sticky='nw')
+        self.frame_general_image = ttk.Frame(self.frame_general, 
+                                             style='Card.TFrame', 
+                                             padding={10, 10, 10 , 10})
+        self.frame_general_image.grid(row=0, column=1, padx=10, pady=20, sticky='n')
 
         # 3-1 Create Label for Image
 
@@ -259,7 +281,8 @@ class TokenPreviewer:
 
         # 3-2 Create Image
 
-        self.image = ttk.Label(self.frame_general_image, compound=None)
+        self.image = ttk.Label(self.frame_general_image, 
+                               compound=None)
         self.image.grid(row=1, column=0, sticky=W+E, padx=10)
 
         # 4 - Create Menu
@@ -292,11 +315,16 @@ class TokenPreviewer:
             # Отображаем изображение с фиксированным размером
             try:
                 fixed_size = (
-                    self.root.winfo_height() - 100 * ((self.root.winfo_screenheight() - (self.root.winfo_height() - 100)) // 100),
-                    self.root.winfo_width() - 100 * ((2880 - (self.root.winfo_height() - 100)) // 100)
+                    self.screen_width_max - self.frame_box_txt.winfo_width(),
+                    self.screen_height_max - self.frame_box_txt.winfo_height()
                 )
                 image = image_file
-                print (self.root.winfo_screenmmheight())
+                # print (self.root.winfo_screenheight())
+                # print(self.screen_width_max)
+                # print(self.root.winfo_width())
+                # print(self.frame_box_button.winfo_width())
+                # print(self.frame_box_txt.winfo_width())
+                # print(fixed_size[0])
                 image.thumbnail(fixed_size, Image.BICUBIC)
                 
                 self.photo_image = ImageTk.PhotoImage(image)
@@ -320,7 +348,7 @@ class TokenPreviewer:
             self.combobox_tokens = ttk.Combobox(self.frame_box_button,
                                             value=_tok,
                                             state='readonly',
-                                            width=30)
+                                            width=25)
             self.combobox_tokens.grid(row=4, column=0, pady=10)
 
             for token in self.tokens:
@@ -334,12 +362,12 @@ class TokenPreviewer:
 
     def save_file(self):
         if self.selected_token:
-            save_path = filedialog.asksaveasfilename(defaultextension=None, filetypes=[("Text and pceudo files", f"*.txt *.{self.customizationWindow.cur_format}")])
+            save_path = filedialog.asksaveasfilename(defaultextension=None, filetypes=[("Text, pseudo, and dot files", f"*.txt *.{self.customizationWindow.cur_format} *.dot")])
             if save_path:
                 # Сохранение текстового файла
                 with open(save_path, "w") as file:
-                    # Get the content from the Text widget
-                    text_content = self.text_preview.get("1.0", "end-1c")
+                    # Получаем содержимое виджета ScrolledText
+                    text_content = self.text.get("1.0", "end-1c")
                     file.write(text_content)
 
                 # Получение пути к изображению
@@ -347,8 +375,34 @@ class TokenPreviewer:
                 # Сохранение изображения 
                 image_file.save(save_path.replace(".txt", f".{self.customizationWindow.cur_format}"))
 
+                # Проверяем состояние чекбокса и сохраняем файл в формате .dot, если чекбокс отмечен
+                if self.checkbutton_save_dot.instate(['selected']):
+                    with open(save_path.replace(".txt", ".dot"), "w") as dot_file:
+                        dot_content = self.selected_token[3]
+                        dot_file.write(dot_content)
+
+                # Проверяем состояние чекбокса и сохраняем файл в формате .dot, если чекбокс отмечен
+                if self.checkbutton_save_dot.instate(['selected']):
+                    with open(save_path.replace(".txt", ".dot"), "w") as dot_file:
+                        dot_content = self.selected_token[3]
+                        dot_file.write(dot_content)
+
     def save_file_all(self):
-        pass
+        folder_path = filedialog.askdirectory()
+
+        if folder_path:
+            for index, token in enumerate(self.tokens):
+                save_path = f"{token[0]}_{index}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+
+                with open(f"{folder_path}/{save_path}.txt", "w") as file:
+                    file.write(str(token[1]))
+
+                token[2].save(f"{folder_path}/{save_path}.png")
+
+                if self.checkbutton_save_dot.instate(['selected']):
+                    with open(f"{folder_path}/{save_path}.dot", "w") as dot_file:
+                        dot_file.write(token[3])
+   
 
 if __name__ == "__main__":
     root = Tk()
