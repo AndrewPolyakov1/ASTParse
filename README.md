@@ -20,7 +20,7 @@ pip install -r requirements.txt
 | Казаков Алексей   | архитектура, трансляция Python в псевдокод      |
 | Васильев Анатолий | UI                                              |
 
-# Интерфейс py2art
+# Интерфейс Py2Art
 `save_image(path: str, config: str, format: str) -> None` - рендерит изображение формата `format` на основе dot-конфига `config` в файл `{path}.{format}`
 
 `def build_cfg_config(code: str, pseudocode: bool = True) -> str` - строит CFG на основе исходного кода `code` в формате dot
