@@ -29,8 +29,8 @@ class CustomizationWindow():
                 self.key_image = ImageTk.PhotoImage(self.key_image)
                 self.image.config(image=self.key_image)
 
-        def change_format(self):
-            self.cur_format = self.combobox_format.current()
+        def change_format(self, event):
+            self.cur_format = self.formats[self.combobox_format.current()]
         
         def show(self):
             if not self.customizationExists:
@@ -389,7 +389,7 @@ class TokenPreviewer:
                 if self.customizationWindow.cur_format == "png":
                     image_file.save(save_path.replace(".txt", ".png"))
                 else:
-                    save_image(save_path.replace(".txt", ""), self.selected_token[3], self.customizationWindow.cur_format)
+                    ASTlib.save_image(save_path.replace(".txt", ""), self.selected_token[3], self.customizationWindow.cur_format)
 
 
                 # Проверяем состояние чекбокса и сохраняем файл в формате .dot, если чекбокс отмечен
