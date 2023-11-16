@@ -4,13 +4,13 @@ from PIL import Image, ImageTk
 from datetime import datetime
 import shutil
 from tkinter import Tk, Button, Label, Listbox, Frame, Text, PhotoImage, filedialog, ttk, Menu, Toplevel, colorchooser, Scrollbar, scrolledtext, LabelFrame
-import ASTlib
+import py2art
 from tkinter.constants import CENTER
 
 class CustomizationWindow():
         
         customizationExists = False
-        formats = ASTlib.get_supported_formats()
+        formats = py2art.get_supported_formats()
         cur_format = formats[0]
         def __init__(self, parent : Tk) -> None:
              self.parent = parent
@@ -24,8 +24,8 @@ class CustomizationWindow():
             color_code = colorchooser.askcolor(color=self.node_styles[key],title ="Choose " + element +  "'s color", parent=self.child)
             if color_code[1] is not None:
                 self.node_styles[key] = color_code[1]
-                ASTlib.change_keys_colors(self.node_styles)
-                self.key_image = ASTlib.get_keys_image()
+                py2art.change_keys_colors(self.node_styles)
+                self.key_image = py2art.get_keys_image()
                 self.key_image = ImageTk.PhotoImage(self.key_image)
                 self.image.config(image=self.key_image)
 
@@ -34,7 +34,7 @@ class CustomizationWindow():
         
         def show(self):
             if not self.customizationExists:
-                self.node_styles = ASTlib.get_keys_colors()
+                self.node_styles = py2art.get_keys_colors()
                 self.child = Toplevel(self.parent)
                 self.customizationExists = True
                 # 0 - Create general Frame for objects
@@ -130,7 +130,7 @@ class CustomizationWindow():
                 # 3 - 1 Create Image
                 self.image = ttk.Label(self.frame_general_image, compound=None)
                 self.image.grid(row=1, column=0, sticky=W+E, padx=10)
-                key_image = ASTlib.get_keys_image()
+                key_image = py2art.get_keys_image()
                 key_image = ImageTk.PhotoImage(key_image)
                 self.image.config(image=key_image)
                     
@@ -354,9 +354,9 @@ class TokenPreviewer:
             with open(file_path, "r") as file:
                 self.text_content = file.read()
                 if self.checkbutton_pseudo.instate(['selected']):
-                    self.tokens = ASTlib.code_to_image_and_pseudocode(file_path, pseudocode = True)
+                    self.tokens = py2art.code_to_image_and_pseudocode(file_path, pseudocode = True)
                 else:
-                    self.tokens = ASTlib.code_to_image_and_pseudocode(file_path, pseudocode = False)
+                    self.tokens = py2art.code_to_image_and_pseudocode(file_path, pseudocode = False)
                 self.text_ini.config(state="normal")
                 self.text_ini.delete(1.0, "end")
                 self.text_ini.insert("end", self.text_content)
@@ -394,7 +394,7 @@ class TokenPreviewer:
                 if self.customizationWindow.cur_format == "png":
                     image_file.save(save_path.replace(".txt", ".png"))
                 else:
-                    ASTlib.save_image(save_path.replace(".txt", ""), self.selected_token[3], self.customizationWindow.cur_format)
+                    py2art.save_image(save_path.replace(".txt", ""), self.selected_token[3], self.customizationWindow.cur_format)
 
 
                 # Проверяем состояние чекбокса и сохраняем файл в формате .dot, если чекбокс отмечен
@@ -422,7 +422,7 @@ class TokenPreviewer:
                 if self.customizationWindow.cur_format == "png":
                     token[2].save(f"{folder_path}/{save_path}.png")
                 else:
-                    ASTlib.save_image(f"{folder_path}/{save_path}", token[3], self.customizationWindow.cur_format)
+                    py2art.save_image(f"{folder_path}/{save_path}", token[3], self.customizationWindow.cur_format)
 
 
                 if self.checkbutton_save_dot.instate(['selected']):
