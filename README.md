@@ -1,12 +1,8 @@
-# ASTParse (Py2Art)
+# Py2Art (ASTParse)
 Code for ITMO hackathon (Nov 2023)
 
 # Тема
-
-Написание утилиты, позволяющей визуализировать и отображать структуру <mark>программы/класса/AST</mark> на языке _Python_ для языка _Python_ :joy:
-
-Основное назначение для _публицации статей_ на хабре/гитхабе, чтобы не рисовать это вручную. (ну и для обучающих целей)
-Также для _дебага_ программы
+Утилита, позволяющая получить представление функций/классов программы в виде Control Flow Graph (CFG) и псевдокода, предназначенная в первую очередь для облегчения написания статей (например, на Habr или GitHub). 
 
 # Использование
 Установить библиотеки
@@ -16,26 +12,23 @@ pip install -r requirements.txt
 ```
 
 # Участники
+| Name              | Role                                            |
+| ----------------- | ----------------------------------------------- |
+| Мулюкова Амина    | тимлид, трансляция Python в псевдокод           |
+| Поляков Андей     | архитектура, токенизация Python, построение CFG |
+| Жарков Федор      | UI, построение CFG                              |
+| Казаков Алексей   | архитектура, трансляция Python в псевдокод      |
+| Васильев Анатолий | UI                                              |
 
-|Role|Name|
-|--|--|
-|Псевдокод парсер| Амина|
-|Псевдокод грамматика| Леша|
-|Токенизация, сборка| Андрей|
-|UI| Толян|
-|Разнорабочий| Федя|
+# Интерфейс Py2Art
+`save_image(path: str, config: str, format: str) -> None` - рендерит изображение формата `format` на основе dot-конфига `config` в файл `{path}.{format}`
 
-# Интерфейс
+`def build_cfg_config(code: str, pseudocode: bool = True) -> str` - строит CFG на основе исходного кода `code` в формате dot
 
-`translate(code: str) -> str (code)`
+`translate(code: str) -> str` - преобразует исходный код Python в псевдокод
 
-`tokenize(fn: str) -> List[dict]`
+`change_keys_colors(new_node_colors : dict) -> None` - изменяет цвета элементов CFG
+     
+`get_keys_colors() -> dict` - возвращает словарь с цветами элементов CFG
 
-`build_cfg_config(code: str) -> str` -> генерит конфиг
-
-`create_image_from_config(config: str, name : str)` 
-
-`wrapper_image(code: str, name: str) -> path` -> генерит картинку из кода
-
-`code_to_image_and_pseudocode(filepath: str) -> List[tuple[name: str, pseudocode: str, Image, config: str]]:` -> генерит все из пути к файлу кода
-
+`get_supported_formats() -> list(str)` - возвращает список поддерживаемых для экспорта форматов изображений
