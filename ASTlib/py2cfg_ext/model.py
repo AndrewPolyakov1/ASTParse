@@ -20,6 +20,8 @@ import re
 from collections import Counter, deque
 import os
 
+from ..pseudo import parse, unparse
+
 
 class Block(object):
     """
@@ -112,14 +114,14 @@ class Block(object):
         src = ""
         for statement in self.statements:
             if type(statement) in [ast.If, ast.For, ast.While]:
-                src += astor.to_source(statement).split("\n")[0] + "\n"
+                src += unparse(statement).split("\n")[0] + "\n"
             elif (
                 type(statement) == ast.FunctionDef
                 or type(statement) == ast.AsyncFunctionDef
             ):
-                src += (astor.to_source(statement)).split("\n")[0] + "...\n"
+                src += unparse(statement).split("\n")[0] + "...\n"
             else:
-                src += astor.to_source(statement)
+                src += unparse(statement).split("\n")[0] + "\n"
         return src
 
     def get_calls(self) -> str:
