@@ -1,4 +1,4 @@
-# ASTParse (Py2Art)
+# Py2Art (ASTParse)
 Code for ITMO hackathon (Nov 2023)
 
 # Тема
