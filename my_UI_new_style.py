@@ -327,7 +327,7 @@ class TokenPreviewer:
                     self.screen_width_max - self.frame_box_txt.winfo_width(),
                     self.screen_height_max - self.frame_box_txt.winfo_height()
                 )
-                image = image_file
+                image = image_file.copy()
                 # print (self.root.winfo_screenheight())
                 # print(self.screen_width_max)
                 # print(self.root.winfo_width())
