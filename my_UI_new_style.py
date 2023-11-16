@@ -175,14 +175,14 @@ class TokenPreviewer:
 
         # 1-1 - Button - open file 
         self.button_open = ttk.Button(self.frame_box_button,
-                                      text='Открыть файл',
+                                      text='Open',
                                       command=self.open_file,
                                       width=25)
         self.button_open.grid(row=0, column=0, padx=10, pady=5)
 
         # 1-2 - Button - save file
         self.button_save = ttk.Button(self.frame_box_button,
-                                      text="Сохранить файл",
+                                      text="Save",
                                       command=self.save_file,
                                       width=25)
         self.button_save.grid(row=1, column=0, padx=10, pady=5)
@@ -193,7 +193,7 @@ class TokenPreviewer:
 
         # 1-3 - Flag - save all files
         self.button_save_all = ttk.Button(self.frame_save_all,
-                                          text= "Сохранить все",
+                                          text= "Save all",
                                           command=self.save_file_all,
                                           width=15)
         self.button_save_all.grid(row=0, column=0, padx=0, pady=5)
@@ -209,7 +209,7 @@ class TokenPreviewer:
 
         # 1-4 - Label for combobox
         self.label_tokens = ttk.Label(self.frame_box_button,
-                                      text="Функции и классы")
+                                      text="Functions and classes")
         self.label_tokens.grid(row=3, column=0, pady=10)
 
         # 1-5 - Create tokens for preview
@@ -230,7 +230,7 @@ class TokenPreviewer:
 
         # 1-7 - Create checkbutton for pseudocode format
         self.checkbutton_pseudo = ttk.Checkbutton(self.frame_box_button,
-                                    text="pseudocode",
+                                    text="Pseudocode in graph",
                                     variable=BooleanVar(), 
                                     onvalue=True,
                                     offvalue=False)
@@ -245,7 +245,7 @@ class TokenPreviewer:
         # 2-1 Create Label for first ScrollText
 
         self.label_txt_1 = ttk.Label(self.frame_box_txt,
-                                   text="Псевдокод",
+                                   text="Pseudocode",
                                    font=(None, 16))
         self.label_txt_1.grid(row=0, column=0, pady=10)
 
@@ -298,7 +298,12 @@ class TokenPreviewer:
         self.customizationWindow = CustomizationWindow(self.root)
         self.mainmenu = Menu(self.root)
         self.root.config(menu=self.mainmenu)
-        self.mainmenu.add_command(label="Кастомизация", command=self.customizationWindow.show)
+        # self.mainmenu.add_command(label="Customize", command=self.customizationWindow.show)
+
+        open_image = ImageTk.PhotoImage(Image.open("assets/menu.png").resize((30,30)))
+        self.mainmenu.open_image = open_image
+        
+        self.mainmenu.add_command(image=open_image,label="Customize",compound = LEFT, command=self.customizationWindow.show)
 
         # self.root.columnconfigure(0, weight=1)
         # self.root.rowconfigure(0, weight=1)
