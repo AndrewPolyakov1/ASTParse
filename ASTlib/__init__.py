@@ -8,7 +8,10 @@ from .interface import (
     build_cfg_config,
     create_image_from_config,
     code_to_image_and_pseudocode,
-    change_keys_colors
+    change_keys_colors,
+    get_keys_colors,
+    get_keys_image,
+    get_supported_formats,
 )
 from .pseudo import parse, unparse
 from .py2cfg_ext import CFGBuilder
