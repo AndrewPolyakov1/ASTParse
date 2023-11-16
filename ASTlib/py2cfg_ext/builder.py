@@ -128,11 +128,12 @@ class CFGBuilder(ast.NodeVisitor):
     """
 
     def __init__(
-        self, short: bool = True, treebuf: DefaultDict[str, Deque] = None
+        self, short: bool = True, treebuf: DefaultDict[str, Deque] = None, *, pseudocode: bool
     ) -> None:
         self.isShort = short
         self._callbuf: List[FuncBlock] = []
         self._treebuf = defaultdict(deque) if treebuf is None else treebuf
+        self.pseudocode = pseudocode
 
     @property
     def loop_stack(self):
@@ -213,7 +214,7 @@ class CFGBuilder(ast.NodeVisitor):
             A Block object with a new unique id.
         """
         self.current_id += 1
-        block = Block(self.current_id)
+        block = Block(self.current_id, self.pseudocode)
         if statement is not None:
             block.add_statement(statement)
         return block
@@ -226,7 +227,7 @@ class CFGBuilder(ast.NodeVisitor):
             A FuncBlock object with a new unique id.
         """
         self.current_id += 1
-        return FuncBlock(self.current_id)
+        return FuncBlock(self.current_id, pseudocode=self.pseudocode)
 
     def new_try_block(self, statement=None):
         self.current_id += 1
@@ -299,7 +300,7 @@ class CFGBuilder(ast.NodeVisitor):
         # A new sub-CFG is created for the body of the class definition and
         # added to the class CFGs of the current CFG.
         class_body = ast.Module(body=node.body)
-        class_builder = CFGBuilder(self.isShort, self._treebuf)
+        class_builder = CFGBuilder(self.isShort, self._treebuf, pseudocode=self.pseudocode)
         self.cfg.classcfgs[node.name] = classcfg = class_builder.build(
             node.name, class_body, asynchr, self.current_id
         )
@@ -321,7 +322,7 @@ class CFGBuilder(ast.NodeVisitor):
         # A new sub-CFG is created for the body of the function definition and
         # added to the function CFGs of the current CFG.
         func_body = ast.Module(body=node.body)
-        func_builder = CFGBuilder(self.isShort, self._treebuf)
+        func_builder = CFGBuilder(self.isShort, self._treebuf, pseudocode=self.pseudocode)
         cfg = self.cfg.functioncfgs[node.name] = func_builder.build(
             node.name, func_body, asynchr, self.current_id
         )
