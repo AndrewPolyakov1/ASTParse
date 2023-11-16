@@ -114,16 +114,28 @@ class Block(object):
             A string containing the source code of the statements.
         """
         src = ""
-        for statement in self.statements:
-            if type(statement) in [ast.If, ast.For, ast.While]:
-                src += unparse(statement).split("\n")[0] + "\n"
-            elif (
-                type(statement) == ast.FunctionDef
-                or type(statement) == ast.AsyncFunctionDef
-            ):
-                src += unparse(statement).split("\n")[0] + "...\n"
-            else:
-                src += unparse(statement).split("\n")[0] + "\n"
+        if self.pseudocode:
+            for statement in self.statements:
+                if type(statement) in [ast.If, ast.For, ast.While]:
+                    src += unparse(statement).split("\n")[0] + "\n"
+                elif (
+                    type(statement) == ast.FunctionDef
+                    or type(statement) == ast.AsyncFunctionDef
+                ):
+                    src += unparse(statement).split("\n")[0] + "...\n"
+                else:
+                    src += unparse(statement).split("\n")[0] + "\n"
+        else:
+            for statement in self.statements:
+                if type(statement) in [ast.If, ast.For, ast.While]:
+                    src += astor.to_source(statement).split("\n")[0] + "\n"
+                elif (
+                    type(statement) == ast.FunctionDef
+                    or type(statement) == ast.AsyncFunctionDef
+                ):
+                    src += (astor.to_source(statement)).split("\n")[0] + "...\n"
+                else:
+                    src += astor.to_source(statement)
         return src
 
     def get_calls(self) -> str:
@@ -248,16 +260,28 @@ class TryBlock(Block):
         if not self.statements[1:]:
             return "try:"
         src = ""
-        for statement in self.statements[1:]:  # We just want try body
-            if type(statement) in [ast.If, ast.For, ast.While]:
-                src += astor.to_source(statement).split("\n")[0] + "\n"
-            elif (
-                type(statement) == ast.FunctionDef
-                or type(statement) == ast.AsyncFunctionDef
-            ):
-                src += (astor.to_source(statement)).split("\n")[0] + "...\n"
-            else:
-                src += astor.to_source(statement)
+        if self.pseudocode:
+            for statement in self.statements[1:]:  # We just want try body
+                if type(statement) in [ast.If, ast.For, ast.While]:
+                    src += unparse(statement).split("\n")[0] + "\n"
+                elif (
+                    type(statement) == ast.FunctionDef
+                    or type(statement) == ast.AsyncFunctionDef
+                ):
+                    src += unparse(statement).split("\n")[0] + "...\n"
+                else:
+                    src += unparse(statement).split("\n")[0] + "\n"
+        else:
+            for statement in self.statements[1:]:  # We just want try body
+                if type(statement) in [ast.If, ast.For, ast.While]:
+                    src += astor.to_source(statement).split("\n")[0] + "\n"
+                elif (
+                    type(statement) == ast.FunctionDef
+                    or type(statement) == ast.AsyncFunctionDef
+                ):
+                    src += (astor.to_source(statement)).split("\n")[0] + "...\n"
+                else:
+                    src += astor.to_source(statement)
         return src
 
 
