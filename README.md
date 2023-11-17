@@ -11,6 +11,11 @@ Code for ITMO hackathon (Nov 2023)
 pip install -r requirements.txt 
 ```
 
+Запустить UI можно с помощью
+```
+python UI.py
+```
+
 # Участники
 | Name              | Role                                            |
 | ----------------- | ----------------------------------------------- |
